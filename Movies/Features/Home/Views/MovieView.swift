@@ -22,6 +22,7 @@ struct MovieView: View {
                         MovieDetailView(movie: movie)
                     }
             }
+            .navigationTitle("Movies")
         }
     }
 }
