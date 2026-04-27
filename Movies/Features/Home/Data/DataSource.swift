@@ -21,15 +21,14 @@ final class RemoteDataSource {
 
 extension RemoteDataSource: RemoteDataSourcing {
     func request() async throws -> Data {
-        guard let url = URL(string: "https://api.themoviedb.org/3/discover/movie") else {
-            return Data()
-        }
-        
-        var request = URLRequest(url: url)
-        let (data, response) = try await session.data(for: request)
-        if let httpResponse = response as? HTTPURLResponse {
-            if(200..<300).contains(httpResponse.statusCode) {
-                return data
+        if let url = URL(string: "https://api.themoviedb.org/3/discover/movie") {
+            var request = URLRequest(url: url)
+
+            let (data, response) = try await session.data(for: request)
+            if let httpResponse = response as? HTTPURLResponse {
+                if(200..<300).contains(httpResponse.statusCode) {
+                    return data
+                }
             }
         }
         return Data()

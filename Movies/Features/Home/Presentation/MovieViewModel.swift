@@ -9,12 +9,6 @@ import SwiftUI
 import Combine
 import Foundation
 
-//protocol MovieViewModeling {
-//    var moviesResult: [MovieResult] { get }
-//    var isLoading: Bool { get }
-//    func fetchMovies() async
-//}
-
 @MainActor
 final class MovieViewModel: ObservableObject {
     private let useCase: MovieUseCasing

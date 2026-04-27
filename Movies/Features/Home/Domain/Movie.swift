@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Movie: Decodable, Equatable, Hashable {
+public struct Movie: Codable, Equatable, Hashable {
     let page: Int
     let results: [MovieResult]
     let totalPages: Int?
@@ -20,7 +20,7 @@ public struct Movie: Decodable, Equatable, Hashable {
     }
 }
 
-public struct MovieResult: Decodable, Equatable, Hashable {
+public struct MovieResult: Codable, Equatable, Hashable {
     let adult: Bool
     let backdropPath: String?
     let genreIDS: [Int]?
