@@ -23,7 +23,7 @@ final class MovieViewModel: ObservableObject {
 }
 
 extension MovieViewModel {
-    func fetchMovies() async {
+    func fetchMovies() async throws {
         isLoading = true
         defer { isLoading = false }
         do {

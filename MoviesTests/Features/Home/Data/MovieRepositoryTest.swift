@@ -14,37 +14,16 @@ struct MovieRepositoryTest {
     @Test
     func test_fetchMovies_decodesArrayAndCallsDataSourceOnce() async throws {
         let (sut, mock) = makeSut()
+        mock.expectedData = Data(json.utf8)
         
-        do {
-            mock.expectedData = Data(json.utf8)
-            
-            let result = try await sut.fetchMovies()
-            
-            #expect(mock.requestCalled)
-            #expect(mock.requestCount == 1)
-            #expect(!result.isEmpty)
-        } catch {
-            Issue.record("\(error)")
-        }
+        let result = try await sut.fetchMovies()
+        
+        #expect(mock.requestCalled)
+        #expect(mock.requestCount == 1)
+        #expect(!result.isEmpty)
     }
 }
 
-final class MovieRepositoryMock: RemoteDataSourcing {
-    var expectedData: Data?
-    
-    private(set) var requestCalled: Bool = false
-    private(set) var requestCount: Int = 0
-    
-    func request() async throws -> Data {
-        requestCalled = true
-        requestCount += 1
-        
-        if let data = expectedData {
-            return data
-        }
-        return Data()
-    }
-}
 extension MovieRepositoryTest {
     private func makeSut() -> (sut: MovieRepository, mock: MovieRepositoryMock) {
         let mock = MovieRepositoryMock()
@@ -80,33 +59,6 @@ extension MovieRepositoryTest {
         """
         
         return json
-    }
-}
-
-extension Movie {
-    static func fixture() -> Self {
-        .init(page: 0, results: [.fixture()], totalPages: nil, totalResults: nil)
-    }
-}
-
-extension MovieResult {
-    static func fixture() -> Self {
-        .init(
-            adult: false,
-            backdropPath: nil,
-            genreIDS: nil,
-            id: 0,
-            originalLanguage: nil,
-            originalTitle: nil,
-            overview: "",
-            popularity: 0.0,
-            posterPath: nil ,
-            releaseDate: nil,
-            title: nil,
-            video: false,
-            voteAverage: nil,
-            voteCount: nil
-        )
     }
 }
 

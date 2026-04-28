@@ -15,7 +15,9 @@ struct MovieView: View {
             VStack {
                 MovieList(movies: $viewModel.movies)
                     .task {
-                        await viewModel.fetchMovies()
+                        Task {
+                            try await viewModel.fetchMovies()
+                        }
                     }
                     .listStyle(.inset)
                     .navigationDestination(for: MovieResult.self) { movie in
