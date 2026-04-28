@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct MoviesApp: App {
+    @State private var isActive = false
+    
     var body: some Scene {
         WindowGroup {
-            MovieFactory.make()
+            if isActive {
+                MovieFactory.make()
+            } else {
+                SplashView(isActive: $isActive)
+            }
         }
     }
 }
