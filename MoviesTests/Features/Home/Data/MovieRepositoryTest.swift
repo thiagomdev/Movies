@@ -30,7 +30,9 @@ extension MovieRepositoryTest {
         let sut = MovieRepository(dataSource: mock)
         return (sut, mock)
     }
-    
+}
+
+extension MovieRepositoryTest {
     private var json: String {
         let json = """
         {
@@ -61,4 +63,3 @@ extension MovieRepositoryTest {
         return json
     }
 }
-

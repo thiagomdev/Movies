@@ -9,6 +9,7 @@
 
 final class MovieViewModelSpy: MovieUseCasing {
     var expected: [MovieResult] = []
+    var errorToThrow: Error?
     
     private(set) var executeCalled: Bool = false
     private(set) var executeCount: Int = 0
@@ -16,6 +17,10 @@ final class MovieViewModelSpy: MovieUseCasing {
     func execute() async throws -> [MovieResult] {
         executeCalled = true
         executeCount += 1
+        
+        if let error = errorToThrow {
+            throw error
+        }
         return expected
     }
 }

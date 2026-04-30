@@ -23,7 +23,5 @@ extension MovieUseCase: MovieUseCasing {
     func execute() async throws -> [MovieResult] {
         let movies = try await repository.fetchMovies()
         return movies
-            .filter { !$0.adult }
-            .sorted { $0.popularity > $1.popularity }
     }
 }

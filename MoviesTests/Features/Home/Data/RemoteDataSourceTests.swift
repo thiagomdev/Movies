@@ -38,7 +38,9 @@ extension RemoteDataSourceTests {
         let sut = RemoteDataSource(session: session)
         return sut
     }
-    
+}
+
+extension RemoteDataSourceTests {
     private var url: URL {
         URL(string: "https://api.themoviedb.org/3/discover/movie")!
     }
