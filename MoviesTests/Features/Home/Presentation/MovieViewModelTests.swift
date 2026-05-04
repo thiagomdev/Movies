@@ -27,7 +27,6 @@ struct MovieViewModelTests {
     @Test("fetchMovies - should set errorMessage when use case fails")
     func fetchMovies_withError() async throws {
         let (sut, spy) = makeSut()
-        
         spy.errorToThrow = anyError
         
         try await sut.fetchMovies()
