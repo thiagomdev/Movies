@@ -17,12 +17,12 @@ struct MovieDetailView: View {
                 AsyncImage(url: TMDBConfig.posterURL(movie.posterPath)) { image in
                     image
                         .resizable()
-                        .scaledToFit()
+                        .scaledToFill()
                 } placeholder: {
-                    Rectangle()
-                        .foregroundStyle(.secondary.opacity(0.3))
+                    ProgressView()
                 }
                 .frame(maxWidth: .infinity)
+                .aspectRatio(2/3, contentMode: .fit)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .padding(.horizontal)
 

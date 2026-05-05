@@ -15,17 +15,12 @@ struct MovieList: View {
             ForEach(movies, id: \.id) { movie in
                 NavigationLink(value: movie) {
                     HStack(alignment: .top, spacing: 12) {
-                        AsyncImage(url: TMDBConfig.posterURL(movie.posterPath)) { image in
-                            image
-                                .resizable()
-                                .scaledToFit()
-                        } placeholder: {
-                            Rectangle()
-                                .foregroundStyle(.secondary.opacity(0.3))
-                        }
-                        .frame(width: 90, height: 130)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .padding(.horizontal)
+                        CachedAsyncImage(url: TMDBConfig.posterURL(movie.posterPath))
+                            .scaledToFill()
+                            .frame(width: 90, height: 130)
+                            .aspectRatio(2/3, contentMode: .fit)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .padding(.horizontal)
                         
                         VStack(alignment: .leading, spacing: 4) {
                             Text(movie.title ?? "Unknown")
