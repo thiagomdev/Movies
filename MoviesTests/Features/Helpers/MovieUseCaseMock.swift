@@ -7,7 +7,7 @@
 
 @testable import Movies
 
-final class MovieUseCaseMock: MovieRepositoring {
+final class MovieUseCaseMock: MovieRepositoryProtocol {
     var expected: [MovieResult] = []
     
     private(set) var fetchMoviesCalled: Bool = false

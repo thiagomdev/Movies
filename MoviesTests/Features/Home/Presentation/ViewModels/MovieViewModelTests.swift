@@ -10,6 +10,7 @@ import Foundation
 @testable import Movies
 
 @MainActor
+@Suite("🧪 Movie ViewModel")
 struct MovieViewModelTests {
     @Test("fetchMovies - should populate movies when use case succeeds")
     func fetchMovies_withSuccess() async throws {

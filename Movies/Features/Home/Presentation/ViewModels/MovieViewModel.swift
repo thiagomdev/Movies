@@ -11,13 +11,13 @@ import Foundation
 
 @MainActor
 final class MovieViewModel: ObservableObject {
-    private let useCase: MovieUseCasing
+    private let useCase: MovieUseCaseProtocol
     
     @Published var movies: [MovieResult] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     
-    init(useCase: MovieUseCasing) {
+    init(useCase: MovieUseCaseProtocol) {
         self.useCase = useCase
     }
 }

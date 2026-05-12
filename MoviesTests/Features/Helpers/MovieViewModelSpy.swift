@@ -7,7 +7,7 @@
 
 @testable import Movies
 
-final class MovieViewModelSpy: MovieUseCasing {
+final class MovieViewModelSpy: MovieUseCaseProtocol {
     var expected: [MovieResult] = []
     var errorToThrow: Error?
     

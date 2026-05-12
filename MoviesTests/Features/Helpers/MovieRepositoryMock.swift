@@ -8,19 +8,15 @@
 import Foundation
 @testable import Movies
 
-final class MovieRepositoryMock: RemoteDataSourcing {
-    var expectedData: Data?
+final class MovieRepositoryMock: RemoteDataSourceProtocol {
+    var expectedData: Movie = .fixture()
     
     private(set) var requestCalled: Bool = false
     private(set) var requestCount: Int = 0
     
-    func request() async throws -> Data {
+    func fetchMovies() async throws -> Movie {
         requestCalled = true
         requestCount += 1
-        
-        if let data = expectedData {
-            return data
-        }
-        return Data()
+        return expectedData
     }
 }

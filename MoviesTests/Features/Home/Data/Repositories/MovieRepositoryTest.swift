@@ -10,24 +10,25 @@ import Foundation
 @testable import Movies
 
 @MainActor
+@Suite("🧪 Movie Repository")
 struct MovieRepositoryTest {
     @Test
     func test_fetchMovies_decodesArrayAndCallsDataSourceOnce() async throws {
         let (sut, mock) = makeSut()
-        mock.expectedData = Data(json.utf8)
         
         let result = try await sut.fetchMovies()
         
         #expect(mock.requestCalled)
         #expect(mock.requestCount == 1)
-        #expect(!result.isEmpty)
+        #expect(mock.expectedData == .fixture())
+        #expect(result.isEmpty == false)
     }
 }
 
 extension MovieRepositoryTest {
-    private func makeSut() -> (sut: MovieRepository, mock: MovieRepositoryMock) {
+    private func makeSut() -> (sut: MovieRepositoryImpl, mock: MovieRepositoryMock) {
         let mock = MovieRepositoryMock()
-        let sut = MovieRepository(dataSource: mock)
+        let sut = MovieRepositoryImpl(dataSource: mock)
         return (sut, mock)
     }
 }

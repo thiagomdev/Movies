@@ -1,26 +1,11 @@
 //
-//  Movie.swift
+//  MovieResult.swift
 //  Movies
 //
-//  Created by Thiago Monteiro on 4/15/26.
+//  Created by Thiago Monteiro on 5/12/26.
 //
 
-import Foundation
-
-public struct Movie: Codable, Equatable, Hashable {
-    let page: Int
-    let results: [MovieResult]
-    let totalPages: Int?
-    let totalResults: Int?
-
-    enum CodingKeys: String, CodingKey {
-        case page, results
-        case totalPages = "total_pages"
-        case totalResults = "total_results"
-    }
-}
-
-public struct MovieResult: Codable, Equatable, Hashable {
+struct MovieResult: Decodable, Equatable, Hashable {
     let adult: Bool
     let backdropPath: String?
     let genreIDS: [Int]?

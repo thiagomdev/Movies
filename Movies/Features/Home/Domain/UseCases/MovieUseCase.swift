@@ -7,19 +7,19 @@
 
 import Foundation
 
-protocol MovieUseCasing {
+protocol MovieUseCaseProtocol {
     func execute() async throws -> [MovieResult]
 }
 
 final class MovieUseCase {
-    private let repository: MovieRepositoring
+    private let repository: MovieRepositoryProtocol
     
-    init(repository: MovieRepositoring) {
+    init(repository: MovieRepositoryProtocol) {
         self.repository = repository
     }
 }
 
-extension MovieUseCase: MovieUseCasing {
+extension MovieUseCase: MovieUseCaseProtocol {
     func execute() async throws -> [MovieResult] {
         let movies = try await repository.fetchMovies()
         return movies
