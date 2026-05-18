@@ -7,25 +7,20 @@
 
 import Foundation
 
-enum MovieEndpoint: APIEndpoint {
-    case endpoint
+enum MoviesEndpoint: APIClientEndpoint {
+    case movies
     
-    var path: String {
-        switch self {
-        case .endpoint:
-            return "/3/discover/movie"
-        }
-    }
+    var baseURL: String { "https://api.themoviedb.org" }
     
-    var queryItems: [URLQueryItem] {
-        return []
-    }
+    var endpoint: String { "/3/discover/movie" }
     
-    var method: HTTPMethod {
-        return .get
-    }
+    var httpMethod: HTTPMethod { .get }
     
-    var timeout: TimeInterval {
-        return 10
-    }
+    var parameters: [String : String]? { nil }
+    
+    var headers: [String : String]? { nil }
+    
+    var body: Data? { nil }
+    
+    var timeout: TimeInterval { return 10 }
 }

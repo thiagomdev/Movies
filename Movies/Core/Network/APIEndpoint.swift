@@ -6,10 +6,15 @@
 //
 
 import Foundation
-// MARK: - API Endpoint
-protocol APIEndpoint {
-    var path: String { get }
-    var queryItems: [URLQueryItem] { get }
-    var method: HTTPMethod { get }
+
+// MARK: - APIClient Endpoint
+protocol APIClientEndpoint {
+    var baseURL: String { get }
+    var endpoint: String { get }
+    var httpMethod: HTTPMethod { get }
+    
+    var parameters: [String: String]? { get }
+    var headers: [String: String]? { get }
+    var body: Data? { get }
     var timeout: TimeInterval { get }
 }

@@ -21,6 +21,6 @@ final class MovieRemoteDataSource {
 
 extension MovieRemoteDataSource: RemoteDataSourceProtocol {
     func fetchMovies() async throws -> Movie {
-        try await apiClient.request(MovieEndpoint.endpoint)
+        try await apiClient.request(MoviesEndpoint.movies)
     }
 }

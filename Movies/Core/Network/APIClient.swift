@@ -8,36 +8,33 @@
 import Foundation
 
 protocol MoviAPIClientProtocol {
-    func request<T: Decodable>(_ endpont: APIEndpoint) async throws -> T
+    func request<T: Decodable>(_ urlComponents: APIClientEndpoint) async throws -> T
 }
 
-final class MovieAPIClient {
-    private let baseURL: String = "https://api.themoviedb.org"
+struct MovieAPIClient: Sendable {
     private let session: URLSession
     private let decoder: JSONDecoder
     
     init(session: URLSession) {
         self.session = session
         self.decoder = JSONDecoder()
-        self.decoder.keyDecodingStrategy = .convertFromSnakeCase
+        self.decoder.keyDecodingStrategy = .convertFromSnakeCase 
     }
 }
 
 extension MovieAPIClient: MoviAPIClientProtocol {
-    func request<T>(_ endpont: APIEndpoint) async throws -> T where T : Decodable {
-        guard var components = URLComponents(string: baseURL + endpont.path) else {
+    func request<T>(_ urlComponents: APIClientEndpoint) async throws -> T where T : Decodable {
+        guard let components = URLComponents(string: urlComponents.baseURL + urlComponents.endpoint) else {
             throw APIError.invalidURL
         }
-        components.queryItems = endpont.queryItems.isEmpty ? nil : endpont.queryItems
         
         guard let url = components.url else {
             throw APIError.invalidURL
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.timeoutInterval = endpont.timeout
-        urlRequest.httpMethod = endpont.method.rawValue
-        urlRequest.allHTTPHeaderFields = [:]
+        urlRequest.httpMethod = urlComponents.httpMethod.rawValue
+        urlRequest.allHTTPHeaderFields = urlComponents.headers
         
         let (data, response) = try await performRequest(urlRequest)
         try validate(response: response)
