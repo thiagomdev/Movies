@@ -13,8 +13,8 @@ enum MovieFactory {
         let dataSource = MovieRemoteDataSource(apiClient: apiClient)
         let repository = MovieRepositoryImpl(dataSource: dataSource)
         let useCase = MovieUseCase(repository: repository)
-        let viewModel = MovieViewModel(useCase: useCase)
-        let view = MovieView(viewModel: viewModel)
+        let store = MovieStore(useCase: useCase)
+        let view = MovieView(store: store)
         return view
     }
 }

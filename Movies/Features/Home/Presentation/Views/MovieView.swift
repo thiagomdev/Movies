@@ -8,23 +8,28 @@
 import SwiftUI
 
 struct MovieView: View {
-    @StateObject var viewModel: MovieViewModel
+    @StateObject var store: MovieStore
     
     var body: some View {
         NavigationStack {
             VStack {
-                MovieList(movies: $viewModel.movies)
-                    .task {
-                        Task {
-                            try await viewModel.fetchMovies()
+                switch store.state {
+                case .loading:
+                    ProgressView()
+                case let .loaded(movies):
+                    MovieList(movies: movies)
+                        .listStyle(.inset)
+                        .navigationDestination(for: MovieResult.self) { movie in
+                            MovieDetailView(movie: movie)
                         }
-                    }
-                    .listStyle(.inset)
-                    .navigationDestination(for: MovieResult.self) { movie in
-                        MovieDetailView(movie: movie)
-                    }
+                case let .failed(error):
+                    Text(error)
+                }
             }
             .navigationTitle("Movies")
+        }
+        .onAppear {
+            store.send(.fetchMovies)
         }
     }
 }

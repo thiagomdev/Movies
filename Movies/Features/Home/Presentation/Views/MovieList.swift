@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MovieList: View {
-    @Binding var movies: [MovieResult]
+    private(set) var movies: [MovieResult]
     
     var body: some View {
         List {
