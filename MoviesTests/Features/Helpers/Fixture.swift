@@ -9,7 +9,7 @@
 
 extension Movie {
     static func fixture() -> Self {
-        .init(page: 0, results: [.fixture], totalPages: nil, totalResults: nil)
+        .init(page: 0, results: [.fixture], totalPages: 4, totalResults: 2)
     }
 }
 

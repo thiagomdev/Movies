@@ -12,7 +12,7 @@ import Testing
 @Suite("🧪 Movie UseCase")
 struct MovieUseCaseTests {
     @Test
-    func execute() async throws {
+    func executeShouldReturnResultMovie() async throws {
         let (sut, mock) = makeSut()
         mock.expected = [.fixture]
         

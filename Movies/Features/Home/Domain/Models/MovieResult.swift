@@ -5,7 +5,7 @@
 //  Created by Thiago Monteiro on 5/12/26.
 //
 
-struct MovieResult: Decodable, Equatable, Hashable {
+struct MovieResult: Codable, Equatable, Hashable {
     let adult: Bool
     let backdropPath: String?
     let genreIDS: [Int]?

@@ -10,7 +10,7 @@ import Foundation
 
 @MainActor
 final class MovieStore: ObservableObject {
-    @Published private(set) var state: MovieState = .loading
+    @Published var state: MovieState = .loading
     
     private let useCase: MovieUseCaseProtocol
     
@@ -31,7 +31,6 @@ extension MovieStore {
 extension MovieStore {
     private func fetchMovies() async throws {
         state = .loading
-        try? await Task.sleep(for: .seconds(1))
         do {
             let movies = try await useCase.execute()
             state = .loaded(movies)

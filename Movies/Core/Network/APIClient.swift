@@ -11,7 +11,7 @@ protocol MoviAPIClientProtocol {
     func request<T: Decodable>(_ urlComponents: APIClientEndpoint) async throws -> T
 }
 
-struct MovieAPIClient: Sendable {
+struct MovieAPIClient {
     private let session: URLSession
     private let decoder: JSONDecoder
     

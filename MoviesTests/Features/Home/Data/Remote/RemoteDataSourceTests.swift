@@ -13,7 +13,7 @@ import Foundation
 struct RemoteDataSourceTests {
     @Test
     @MainActor
-    func request_success() async throws {
+    func requestSuccess() async throws {
         let sut = makeSut()
 
         MockURLProtocol.requestHandlers[url] = { request in

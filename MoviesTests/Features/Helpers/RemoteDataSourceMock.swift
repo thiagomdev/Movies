@@ -11,7 +11,7 @@ final class MockURLProtocol: URLProtocol {
     static var requestHandlers = [URL: (URLRequest) throws -> (HTTPURLResponse, Data)]()
 
     override class func canInit(with request: URLRequest) -> Bool {
-        return request.url.flatMap { MockURLProtocol.requestHandlers[$0] } != nil
+        return true
     }
 
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {

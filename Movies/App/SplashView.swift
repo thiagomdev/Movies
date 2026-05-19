@@ -20,11 +20,7 @@ struct SplashView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                withAnimation {
-                    isActive.toggle()
-                }
-            }
+            isActive.toggle()
         }
     }
 }

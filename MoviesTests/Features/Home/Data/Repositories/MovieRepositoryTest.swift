@@ -13,7 +13,7 @@ import Foundation
 @Suite("🧪 Movie Repository")
 struct MovieRepositoryTest {
     @Test
-    func test_fetchMovies_decodesArrayAndCallsDataSourceOnce() async throws {
+    func fetchMoviesDecodesArrayAndCallsDataSourceOnce() async throws {
         let (sut, mock) = makeSut()
         
         let result = try await sut.fetchMovies()

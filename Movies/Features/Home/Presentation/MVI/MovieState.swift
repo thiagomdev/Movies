@@ -5,7 +5,7 @@
 //  Created by Thiago Monteiro on 5/18/26.
 //
 
-enum MovieState {
+enum MovieState: Equatable, Hashable {
     case loading
     case loaded([MovieResult])
     case failed(String)
