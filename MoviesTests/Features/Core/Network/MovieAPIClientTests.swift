@@ -10,7 +10,7 @@ import Foundation
 @testable import Movies
 
 @MainActor
-@Suite("🧪 Movie API Client")
+@Suite("🧪 Movie API Client", .serialized)
 struct MovieAPIClientTests {
     @Test
     func request_unauthorized() async throws {
