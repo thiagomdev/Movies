@@ -8,7 +8,7 @@
 @testable import Movies
 
 extension Movie {
-    static func fixture() -> Self {
+    static var fixture: Self {
         .init(page: 0, results: [.fixture], totalPages: 4, totalResults: 2)
     }
 }

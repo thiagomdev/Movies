@@ -13,6 +13,29 @@ import Foundation
 @Suite("🧪 Movie API Client", .serialized)
 struct MovieAPIClientTests {
     @Test
+    func request_success() async throws {
+        defer { URLProtocolMock.requestHandler = nil }
+        
+        let expectedMovies: Movie = .fixture
+        let data = try JSONEncoder().encode(expectedMovies)
+        
+        URLProtocolMock.requestHandler = { _ in
+            let response = HTTPURLResponse(
+                url: URL(string: "https://api.themoviedb.org/3/discover/movie")!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: nil
+            )!
+            return (response, data)
+        }
+        
+        let sut = makeSut()
+        
+        let result: Movie = try await sut.request(MoviesEndpoint.movies)
+        #expect(result.results == expectedMovies.results)
+    }
+    
+    @Test
     func request_unauthorized() async throws {
         URLProtocolMock.requestHandler = { _ in
             let response = HTTPURLResponse(
@@ -26,7 +49,7 @@ struct MovieAPIClientTests {
         
         let sut = makeSut()
         
-        await #expect(throws: Error.self) {
+        await #expect(throws: APIError.self) {
             let _: [MovieResult] = try await sut.request(MoviesEndpoint.movies)
         }
     }
@@ -45,7 +68,7 @@ struct MovieAPIClientTests {
             return (response, Data())
         }
         
-        await #expect(throws: Error.self) {
+        await #expect(throws: APIError.self) {
             let _: [MovieResult] = try await sut.request(MoviesEndpoint.movies)
         }
     }

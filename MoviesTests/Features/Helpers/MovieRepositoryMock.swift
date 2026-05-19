@@ -9,7 +9,7 @@ import Foundation
 @testable import Movies
 
 final class MovieRepositoryMock: RemoteDataSourceProtocol {
-    var expectedData: Movie = .fixture()
+    var expectedData: Movie = .fixture
     
     private(set) var requestCalled: Bool = false
     private(set) var requestCount: Int = 0

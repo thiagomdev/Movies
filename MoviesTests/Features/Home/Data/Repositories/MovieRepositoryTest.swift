@@ -20,7 +20,7 @@ struct MovieRepositoryTest {
         
         #expect(mock.requestCalled)
         #expect(mock.requestCount == 1)
-        #expect(mock.expectedData == .fixture())
+        #expect(mock.expectedData == .fixture)
         #expect(result.isEmpty == false)
     }
 }
