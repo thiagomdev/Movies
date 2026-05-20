@@ -1,7 +1,7 @@
 # 🎬 Movies
 
-Um app iOS para descobrir filmes populares, construído com 
-SwiftUI e MVI + Clean Architecture.
+App iOS para descobrir filmes populares usando a API do TMDB. 
+Desenvolvido com SwiftUI, MVI + Clean Architecture, com testes unitários e análise de performance com Instruments.
 
 ## 📱 Screenshots
 <img width="300" alt="Simulator Screenshot - iPhone Air - 2026-04-16 at 20 50 21" src="https://github.com/user-attachments/assets/1f2456b5-dc53-4c72-961a-17fe762fc679" />
