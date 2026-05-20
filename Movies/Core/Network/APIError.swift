@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - API Error
-enum APIError: LocalizedError {
+enum APIError: LocalizedError, Equatable {
     case invalidURL
     case invalidResponse
     case httpError(statusCode: Int)
@@ -36,6 +36,29 @@ enum APIError: LocalizedError {
             return "The requested resource was not found."
         case .rateLimited:
             return "Too many requests. Please try again later."
+        }
+    }
+
+    static func == (lhs: APIError, rhs: APIError) -> Bool {
+        switch (lhs, rhs) {
+        case (.invalidURL, .invalidURL),
+             (.invalidResponse, .invalidResponse),
+             (.unauthorized, .unauthorized),
+             (.notFound, .notFound),
+             (.rateLimited, .rateLimited):
+            return true
+        case let (.httpError(a), .httpError(b)):
+            return a == b
+        case let (.decodingError(a), .decodingError(b)):
+            let na = a as NSError
+            let nb = b as NSError
+            return na.domain == nb.domain && na.code == nb.code && na.localizedDescription == nb.localizedDescription
+        case let (.networkError(a), .networkError(b)):
+            let na = a as NSError
+            let nb = b as NSError
+            return na.domain == nb.domain && na.code == nb.code && na.localizedDescription == nb.localizedDescription
+        default:
+            return false
         }
     }
 }

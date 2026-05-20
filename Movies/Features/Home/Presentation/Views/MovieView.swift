@@ -31,6 +31,9 @@ struct MovieView: View {
         .onAppear {
             store.send(.fetchMovies)
         }
+        .onDisappear {
+            store.cancelTasks()
+        }
     }
 }
 

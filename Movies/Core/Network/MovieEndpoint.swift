@@ -22,5 +22,5 @@ enum MoviesEndpoint: APIClientEndpoint {
     
     var body: Data? { nil }
     
-    var timeout: TimeInterval { return 10 }
+    var timeout: TimeInterval { return 3 }
 }

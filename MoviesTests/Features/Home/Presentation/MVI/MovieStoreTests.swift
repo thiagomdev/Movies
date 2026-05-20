@@ -10,14 +10,14 @@ import Foundation
 @testable import Movies
 
 @MainActor
-@Suite("🧪 Movie Store")
+@Suite("🧪 Movie Store", .serialized)
 struct MovieStoreTests {
     @Test
     func sendShouldBeReturnedEmpty() async throws {
         let (sut, spy) = makeSut()
         
         sut.send(.fetchMovies)
-        try await Task.sleep(for: .milliseconds(100))
+        await waitForTaskCompletion()
         
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
@@ -30,7 +30,7 @@ struct MovieStoreTests {
         spy.shouldBeReturned = [.fixture]
         
         sut.send(.fetchMovies)
-        try await Task.sleep(for: .milliseconds(100))
+        await waitForTaskCompletion()
         
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
@@ -43,7 +43,7 @@ struct MovieStoreTests {
         spy.shouldBeReturned = [.fixture, .fixture, .fixture, .fixture]
         
         sut.send(.fetchMovies)
-        try await Task.sleep(for: .milliseconds(100))
+        await waitForTaskCompletion()
         
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
@@ -56,7 +56,7 @@ struct MovieStoreTests {
         spy.shouldFail = NSError(domain: "error", code: 0)
         
         sut.send(.fetchMovies)
-        try await Task.sleep(for: .milliseconds(100))
+        await waitForTaskCompletion()
         
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
@@ -72,20 +72,8 @@ extension MovieStoreTests {
     }
 }
 
-final class MovieStoreSpy: MovieUseCaseProtocol {
-    var shouldBeReturned: [MovieResult] = []
-    var shouldFail: Error? = nil
-    
-    private(set) var executeCalled: Bool = false
-    private(set) var executeCount: Int = 0
-    
-    func execute() async throws -> [MovieResult] {
-        executeCalled = true
-        executeCount += 1
-        
-        if let error = shouldFail {
-            throw error
-        }
-        return shouldBeReturned
+extension MovieStoreTests {
+    private func waitForTaskCompletion() async {
+        try? await Task.sleep(for: .milliseconds(100))
     }
 }
