@@ -12,6 +12,10 @@ import Foundation
 @MainActor
 @Suite("🧪 Movie API Client", .serialized)
 struct MovieAPIClientTests {
+    init() {
+        URLProtocolMock.requestHandler = nil
+    }
+    
     @Test
     func request_success() async throws {
         defer { URLProtocolMock.requestHandler = nil }
@@ -49,7 +53,7 @@ struct MovieAPIClientTests {
         
         let sut = makeSut()
         
-        await #expect(throws: APIError.self) {
+        await #expect(throws: APIError.unauthorized) {
             let _: [MovieResult] = try await sut.request(MoviesEndpoint.movies)
         }
     }
@@ -68,7 +72,7 @@ struct MovieAPIClientTests {
             return (response, Data())
         }
         
-        await #expect(throws: APIError.self) {
+        await #expect(throws: APIError.notFound) {
             let _: [MovieResult] = try await sut.request(MoviesEndpoint.movies)
         }
     }

@@ -11,6 +11,7 @@ import Foundation
 @MainActor
 final class MovieStore: ObservableObject {
     @Published var state: MovieState = .loading
+    private var cancellationTask: Task<Void, Error>?
     
     private let useCase: MovieUseCaseProtocol
     
@@ -23,8 +24,18 @@ extension MovieStore {
     func send(_ intent: MovieIntent) {
         switch intent {
         case .fetchMovies:
-            Task { try await fetchMovies() }
+            cancelTasks()
+            cancellationTask = Task {
+                try await fetchMovies()
+            }
         }
+    }
+}
+
+extension MovieStore {
+    func cancelTasks() {
+        cancellationTask?.cancel()
+        cancellationTask = nil
     }
 }
 

@@ -17,7 +17,9 @@ final class ImageLoader: ObservableObject {
     init (url: URL?) {
         self.url = url
     }
-    
+}
+
+extension ImageLoader {
     func load() async {
         guard let url else { return }
         
@@ -26,16 +28,26 @@ final class ImageLoader: ObservableObject {
             return
         }
         
+        await fetchAndCacheImage(url)
+    }
+}
+
+extension ImageLoader {
+    private func fetchAndCacheImage(_ url: URL) async {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             
-            if let uiImage = UIImage(data: data) {
+            let uiImage = await Task.detached(priority: .background) {
+                UIImage(data: data)
+            }.value
+            
+            if let uiImage {
                 ImageCache.shared.setObject(uiImage, forKey: url as NSURL)
                 self.image = uiImage
             }
             
         } catch {
-            print("Image load error:", error)
+            print("❌ Image load error:", error)
         }
     }
 }
