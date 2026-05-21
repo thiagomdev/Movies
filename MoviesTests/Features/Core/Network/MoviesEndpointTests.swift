@@ -35,7 +35,7 @@ struct MoviesEndpointTests {
     
     @Test
     func headers() {
-        #expect(sut.headers == [:])
+        #expect(sut.headers == nil)
     }
     
     @Test
