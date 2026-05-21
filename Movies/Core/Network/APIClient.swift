@@ -38,10 +38,12 @@ extension MovieAPIClient: MoviAPIClientProtocol {
         
         let (data, response) = try await performRequest(urlRequest)
         try validate(response: response)
+        Logger.log(request: urlRequest, response: response, data: data, error: nil)
         
         do {
             return try decoder.decode(T.self, from: data)
         } catch {
+            Logger.log(request: nil, response: nil, data: nil, error: error)
             throw APIError.decodingError(error)
         }
     }
