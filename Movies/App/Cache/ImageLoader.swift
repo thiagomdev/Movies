@@ -43,9 +43,11 @@ extension ImageLoader {
             
             if let uiImage {
                 ImageCache.shared.setObject(uiImage, forKey: url as NSURL)
-                self.image = uiImage
+                
+                await MainActor.run {
+                    self.image = uiImage
+                }
             }
-            
         } catch {
             print("❌ Image load error:", error)
         }
