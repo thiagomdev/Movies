@@ -9,31 +9,46 @@ import Foundation
 
 final class URLProtocolMock: URLProtocol {
     static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
-    
-    override class func canInit(with request: URLRequest) -> Bool { true }
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
-    
+}
+
+extension URLProtocolMock {
+    override class func canInit(with request: URLRequest) -> Bool {
+        return true
+    }
+}
+
+extension URLProtocolMock {
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+        return request
+    }
+}
+
+extension URLProtocolMock {
     override func startLoading() {
-        print("===> 🎯 startLoading chamado para: \(request.url?.absoluteString ?? "nil")")
+        print("===> DEBUG: 🎯 startLoading chamado para: \(request.url?.absoluteString ?? "nil")")
         
         guard let handler = URLProtocolMock.requestHandler else {
-            print("===> ❌ requestHandler está NIL")
+            print("===> DEBUG: ❌ requestHandler está NIL")
             return
         }
-        print("===> ✅ requestHandler existe, executando...")
+        print("===> DEBUG: ✅ requestHandler existe, executando...")
         
         do {
             let (response, data) = try handler(request)
-            print("===> ✅ handler retornou. Status: \(response.statusCode), bytes: \(data.count)")
+            print("===> DEBUG: ✅ handler retornou. Status: \(response.statusCode), bytes: \(data.count)")
             client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
             client?.urlProtocol(self, didLoad: data)
             client?.urlProtocolDidFinishLoading(self)
-            print("===> ✅ finalizou loading")
+            print("===> DEBUG: ✅ finalizou loading")
         } catch {
-            print("===> ❌ handler lançou erro: \(error)")
+            print("===> DEBUG: ❌ handler lançou erro: \(error)")
             client?.urlProtocol(self, didFailWithError: error)
         }
     }
-    
-    override func stopLoading() {}
+}
+
+extension URLProtocolMock {
+    override func stopLoading() {
+        //: TODO
+    }
 }

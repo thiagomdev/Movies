@@ -5,6 +5,7 @@
       "name" : "Test Scheme Action",
       "options" : {
         "distributor" : "com.apple.TestFlight",
+        "mallocStackLoggingOptions" : null,
         "uiTestingScreenshotsLifetime" : "keepNever"
       }
     }

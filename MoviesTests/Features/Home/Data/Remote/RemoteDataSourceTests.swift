@@ -9,8 +9,11 @@ import Testing
 import Foundation
 @testable import Movies
 
-@Suite("🧪 Remote DataSource")
+@Suite("🧪 Remote DataSource", .serialized)
 struct RemoteDataSourceTests {
+    init() {
+        URLProtocolMock.requestHandler = nil
+    }
     @Test
     func requestSuccess() async throws {
         let sut = makeSut()
