@@ -45,7 +45,6 @@ extension ImageLoader {
                 ImageCache.shared.setObject(uiImage, forKey: url as NSURL)
                 self.image = uiImage
             }
-            
         } catch {
             print("❌ Image load error:", error)
         }

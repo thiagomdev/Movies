@@ -11,7 +11,7 @@ import Foundation
 @MainActor
 final class MovieStore: ObservableObject {
     @Published var state: MovieState = .loading
-    private var cancellationTask: Task<Void, Error>?
+    private var cancellationTask: Task<Void, Never>?
     
     private let useCase: MovieUseCaseProtocol
     
@@ -26,7 +26,7 @@ extension MovieStore {
         case .fetchMovies:
             cancelTasks()
             cancellationTask = Task {
-                try await fetchMovies()
+                await fetchMovies()
             }
         }
     }
@@ -40,7 +40,7 @@ extension MovieStore {
 }
 
 extension MovieStore {
-    private func fetchMovies() async throws {
+    private func fetchMovies() async {
         state = .loading
         do {
             let movies = try await useCase.execute()
