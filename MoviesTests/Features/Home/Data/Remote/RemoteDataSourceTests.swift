@@ -15,9 +15,9 @@ struct RemoteDataSourceTests {
     func requestSuccess() async throws {
         let sut = makeSut()
 
-        MockURLProtocol.requestHandlers[url] = { request in
+        URLProtocolMock.requestHandler = { _ in
             let response = HTTPURLResponse(
-                url: url, statusCode: 200,
+                url: .anyURL, statusCode: 200,
                 httpVersion: "HTTP/1.1",
                 headerFields: ["Content-Type": "application/json"]
             )!
@@ -34,7 +34,7 @@ struct RemoteDataSourceTests {
 extension RemoteDataSourceTests {
     private func makeSut() -> MovieRemoteDataSource {
         let config = URLSessionConfiguration.ephemeral
-        config.protocolClasses = [MockURLProtocol.self]
+        config.protocolClasses = [URLProtocolMock.self]
         let session = URLSession(configuration: config)
         let client = MovieAPIClient(session: session)
         let sut = MovieRemoteDataSource(apiClient: client)
@@ -43,10 +43,6 @@ extension RemoteDataSourceTests {
 }
 
 extension RemoteDataSourceTests {
-    private var url: URL {
-        URL(string: "https://api.themoviedb.org/3/discover/movie")!
-    }
-    
     private var json: String {
         let json = """
         {

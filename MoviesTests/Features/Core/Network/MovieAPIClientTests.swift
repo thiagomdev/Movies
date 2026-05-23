@@ -11,6 +11,7 @@ import Foundation
 
 @Suite("🧪 Movie API Client", .serialized)
 struct MovieAPIClientTests {
+    
     init() {
         URLProtocolMock.requestHandler = nil
     }
@@ -22,7 +23,7 @@ struct MovieAPIClientTests {
         
         URLProtocolMock.requestHandler = { _ in
             let response = HTTPURLResponse(
-                url: URL(string: "https://api.themoviedb.org/3/discover/movie")!,
+                url: anyURL,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: nil
@@ -40,7 +41,7 @@ struct MovieAPIClientTests {
     func request_unauthorized() async throws {
         URLProtocolMock.requestHandler = { _ in
             let response = HTTPURLResponse(
-                url: URL(string: "https://api.themoviedb.org/3/discover/movie")!,
+                url: anyURL,
                 statusCode: 401,
                 httpVersion: nil,
                 headerFields: nil
@@ -61,7 +62,7 @@ struct MovieAPIClientTests {
         
         URLProtocolMock.requestHandler = { _ in
             let response = HTTPURLResponse(
-                url: URL(string: "https://api.themoviedb.org/3/discover/movie")!,
+                url: anyURL,
                 statusCode: 404,
                 httpVersion: nil,
                 headerFields: nil
@@ -81,5 +82,11 @@ extension MovieAPIClientTests {
         config.protocolClasses = [URLProtocolMock.self]
         let session = URLSession(configuration: config)
         return MovieAPIClient(session: session)
+    }
+}
+
+extension MovieAPIClientTests {
+    private var anyURL: URL {
+        URL(string: "https://mock.url")!
     }
 }
