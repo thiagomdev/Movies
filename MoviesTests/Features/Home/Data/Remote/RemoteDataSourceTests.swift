@@ -12,7 +12,6 @@ import Foundation
 @Suite("🧪 Remote DataSource")
 struct RemoteDataSourceTests {
     @Test
-    @MainActor
     func requestSuccess() async throws {
         let sut = makeSut()
 
@@ -26,7 +25,6 @@ struct RemoteDataSourceTests {
             return (response, data)
         }
 
-        
         let data = try await sut.fetchMovies()
 
         #expect(data.results.isEmpty == false)

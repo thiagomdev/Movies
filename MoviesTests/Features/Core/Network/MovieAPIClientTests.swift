@@ -9,7 +9,6 @@ import Testing
 import Foundation
 @testable import Movies
 
-@MainActor
 @Suite("🧪 Movie API Client", .serialized)
 struct MovieAPIClientTests {
     init() {
@@ -18,8 +17,6 @@ struct MovieAPIClientTests {
     
     @Test
     func request_success() async throws {
-        defer { URLProtocolMock.requestHandler = nil }
-        
         let expectedMovies: Movie = .fixture
         let data = try JSONEncoder().encode(expectedMovies)
         
@@ -54,7 +51,7 @@ struct MovieAPIClientTests {
         let sut = makeSut()
         
         await #expect(throws: APIError.unauthorized) {
-            let _: [MovieResult] = try await sut.request(MoviesEndpoint.movies)
+            let _: [Movie] = try await sut.request(MoviesEndpoint.movies)
         }
     }
     
@@ -73,14 +70,14 @@ struct MovieAPIClientTests {
         }
         
         await #expect(throws: APIError.notFound) {
-            let _: [MovieResult] = try await sut.request(MoviesEndpoint.movies)
+            let _: [Movie] = try await sut.request(MoviesEndpoint.movies)
         }
     }
 }
 
 extension MovieAPIClientTests {
     private func makeSut() -> MovieAPIClient {
-        let config = URLSessionConfiguration.default
+        let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [URLProtocolMock.self]
         let session = URLSession(configuration: config)
         return MovieAPIClient(session: session)

@@ -9,7 +9,6 @@ import Testing
 import Foundation
 @testable import Movies
 
-@MainActor
 @Suite("🧪 Movie Repository")
 struct MovieRepositoryTest {
     @Test

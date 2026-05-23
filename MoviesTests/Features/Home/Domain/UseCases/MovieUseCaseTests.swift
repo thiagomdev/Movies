@@ -8,7 +8,6 @@
 import Testing
 @testable import Movies
 
-@MainActor
 @Suite("🧪 Movie UseCase")
 struct MovieUseCaseTests {
     @Test

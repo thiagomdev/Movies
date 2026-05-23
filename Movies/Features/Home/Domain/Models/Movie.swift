@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Movie: Codable, Equatable, Hashable {
+struct Movie: Codable, Equatable {
     let page: Int
     let results: [MovieResult]
     let totalPages: Int?

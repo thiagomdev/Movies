@@ -4,7 +4,8 @@
       "id" : "931B852B-2EC0-4ADE-AEB6-A1B9153357C1",
       "name" : "Test Scheme Action",
       "options" : {
-
+        "distributor" : "com.apple.TestFlight",
+        "uiTestingScreenshotsLifetime" : "keepNever"
       }
     }
   ],
@@ -17,6 +18,9 @@
           "name" : "Movies"
         }
       ]
+    },
+    "mallocStackLoggingOptions" : {
+      "loggingType" : "liveAllocations"
     },
     "performanceAntipatternCheckerEnabled" : true,
     "targetForVariableExpansion" : {
