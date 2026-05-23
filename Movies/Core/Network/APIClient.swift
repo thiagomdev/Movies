@@ -18,7 +18,6 @@ struct MovieAPIClient {
     init(session: URLSession) {
         self.session = session
         self.decoder = JSONDecoder()
-        self.decoder.keyDecodingStrategy = .convertFromSnakeCase 
     }
 }
 

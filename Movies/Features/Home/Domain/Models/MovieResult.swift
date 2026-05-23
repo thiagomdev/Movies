@@ -20,4 +20,16 @@ struct MovieResult: Codable, Equatable, Hashable {
     let video: Bool
     let voteAverage: Double?
     let voteCount: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case adult, id, overview, popularity, title, video
+        case backdropPath = "backdrop_path"
+        case genreIDS = "genre_ids"
+        case originalLanguage = "original_language"
+        case originalTitle = "original_title"
+        case posterPath = "poster_path"
+        case releaseDate = "release_date"
+        case voteAverage = "vote_average"
+        case voteCount = "vote_count"
+    }
 }
