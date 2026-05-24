@@ -5,12 +5,12 @@
 //  Created by Thiago Monteiro on 5/18/26.
 //
 
-import Combine
 import Foundation
 
 @MainActor
-final class MovieStore: ObservableObject {
-    @Published var state: MovieState = .loading
+@Observable
+final class MovieStore {
+    private(set) var state: MovieState = .loading
     private var cancellationTask: Task<Void, Never>?
     
     private let useCase: MovieUseCaseProtocol
@@ -21,21 +21,11 @@ final class MovieStore: ObservableObject {
 }
 
 extension MovieStore {
-    func send(_ intent: MovieIntent) {
+    func send(_ intent: MovieIntent) async {
         switch intent {
         case .fetchMovies:
-            cancelTasks()
-            cancellationTask = Task {
-                await fetchMovies()
-            }
+            await fetchMovies()
         }
-    }
-}
-
-extension MovieStore {
-    func cancelTasks() {
-        cancellationTask?.cancel()
-        cancellationTask = nil
     }
 }
 

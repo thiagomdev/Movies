@@ -32,7 +32,7 @@
   },
   "testTargets" : [
     {
-      "parallelizable" : true,
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:Movies.xcodeproj",
         "identifier" : "AA8227362F9067F60036DA9B",

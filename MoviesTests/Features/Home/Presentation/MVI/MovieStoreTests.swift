@@ -13,10 +13,10 @@ import Foundation
 @Suite("🧪 Movie Store", .serialized)
 struct MovieStoreTests {
     @Test
-    func sendShouldBeReturnedEmpty() async throws {
+    func sendShouldBeReturnedEmpty() async {
         let (sut, spy) = makeSut()
         
-        sut.send(.fetchMovies)
+        await sut.send(.fetchMovies)
         await waitForTaskCompletion()
         
         #expect(spy.executeCalled)
@@ -29,7 +29,7 @@ struct MovieStoreTests {
         let (sut, spy) = makeSut()
         spy.shouldBeReturned = [.fixture]
         
-        sut.send(.fetchMovies)
+        await sut.send(.fetchMovies)
         await waitForTaskCompletion()
         
         #expect(spy.executeCalled)
@@ -42,7 +42,7 @@ struct MovieStoreTests {
         let (sut, spy) = makeSut()
         spy.shouldBeReturned = [.fixture, .fixture, .fixture, .fixture]
         
-        sut.send(.fetchMovies)
+        await sut.send(.fetchMovies)
         await waitForTaskCompletion()
         
         #expect(spy.executeCalled)
@@ -55,7 +55,7 @@ struct MovieStoreTests {
         let (sut, spy) = makeSut()
         spy.shouldFail = NSError(domain: "error", code: 0)
         
-        sut.send(.fetchMovies)
+        await sut.send(.fetchMovies)
         await waitForTaskCompletion()
         
         #expect(spy.executeCalled)
