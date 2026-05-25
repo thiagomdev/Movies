@@ -1,12 +1,12 @@
 //
-//  MovieState.swift
+//  LoadState.swift
 //  Movies
 //
 //  Created by Thiago Monteiro on 5/18/26.
 //
 
-enum MovieState: Equatable {
+enum LoadState<Value: Equatable>: Equatable {
     case loading
-    case loaded([MovieResult])
+    case loaded(Value)
     case failed(String)
 }

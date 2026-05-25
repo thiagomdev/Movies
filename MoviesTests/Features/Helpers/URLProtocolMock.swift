@@ -7,8 +7,8 @@
 
 import Foundation
 
-final class URLProtocolMock: URLProtocol {
-    static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
+final class URLProtocolMock: URLProtocol, @unchecked Sendable {
+     nonisolated(unsafe) static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
 }
 
 extension URLProtocolMock {

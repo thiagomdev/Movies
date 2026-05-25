@@ -20,7 +20,7 @@ struct MovieAPIClientTests {
     func request_success() async throws {
         let expectedMovies: Movie = .fixture
         let data = try JSONEncoder().encode(expectedMovies)
-        
+        defer { URLProtocolMock.requestHandler = nil }
         URLProtocolMock.requestHandler = { _ in
             let response = HTTPURLResponse(
                 url: anyURL,
@@ -39,6 +39,7 @@ struct MovieAPIClientTests {
     
     @Test
     func request_unauthorized() async throws {
+        defer { URLProtocolMock.requestHandler = nil }
         URLProtocolMock.requestHandler = { _ in
             let response = HTTPURLResponse(
                 url: anyURL,
@@ -59,7 +60,7 @@ struct MovieAPIClientTests {
     @Test
     func request_notFound() async throws {
         let sut = makeSut()
-        
+        defer { URLProtocolMock.requestHandler = nil }
         URLProtocolMock.requestHandler = { _ in
             let response = HTTPURLResponse(
                 url: anyURL,

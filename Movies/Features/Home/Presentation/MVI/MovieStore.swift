@@ -10,7 +10,7 @@ import Foundation
 @MainActor
 @Observable
 final class MovieStore {
-    private(set) var state: MovieState = .loading
+    private(set) var state: LoadState<[MovieResult]> = .loading
     private var cancellationTask: Task<Void, Never>?
     
     private let useCase: MovieUseCaseProtocol

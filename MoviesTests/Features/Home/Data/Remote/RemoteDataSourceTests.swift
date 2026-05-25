@@ -17,7 +17,7 @@ struct RemoteDataSourceTests {
     @Test
     func requestSuccess() async throws {
         let sut = makeSut()
-
+        defer { URLProtocolMock.requestHandler = nil }
         URLProtocolMock.requestHandler = { _ in
             let response = HTTPURLResponse(
                 url: .anyURL, statusCode: 200,
