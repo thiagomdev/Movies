@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
-import Combine
 
 @MainActor
-final class ImageLoader: ObservableObject {
-    @Published var image: UIImage?
+@Observable
+final class ImageLoader {
+    var image: UIImage?
     
     private let url: URL?
     
