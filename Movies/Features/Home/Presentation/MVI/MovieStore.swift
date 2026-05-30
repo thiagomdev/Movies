@@ -35,8 +35,10 @@ extension MovieStore {
         do {
             let movies = try await useCase.execute()
             state = .loaded(movies)
+        } catch let error as APIError {
+            state = .failed(error)
         } catch {
-            state = .failed(error.localizedDescription)
+            state = .failed(.networkError(error))
         }
     }
 }

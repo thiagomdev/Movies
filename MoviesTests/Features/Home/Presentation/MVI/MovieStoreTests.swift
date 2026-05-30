@@ -53,14 +53,15 @@ struct MovieStoreTests {
     @Test
     func sendShouldBeReturnedFailed() async throws {
         let (sut, spy) = makeSut()
-        spy.shouldFail = NSError(domain: "error", code: 0)
+        let anyError: NSError = .init(domain: "anyError", code: 0)
+        spy.shouldFail = .networkError(anyError)
         
         await sut.send(.fetchMovies)
         await waitForTaskCompletion()
         
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
-        #expect(sut.state == .failed("The operation couldn’t be completed. (error error 0.)"))
+        #expect(sut.state == .failed(.networkError(anyError)))
     }
 }
 

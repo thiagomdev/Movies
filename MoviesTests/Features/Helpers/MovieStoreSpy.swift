@@ -8,7 +8,7 @@
 @testable import Movies
 final class MovieStoreSpy: MovieUseCaseProtocol {
     var shouldBeReturned: [MovieResult] = []
-    var shouldFail: Error? = nil
+    var shouldFail: APIError? = nil
     
     private(set) var executeCalled: Bool = false
     private(set) var executeCount: Int = 0

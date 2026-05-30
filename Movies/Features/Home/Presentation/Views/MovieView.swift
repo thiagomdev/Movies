@@ -23,7 +23,7 @@ struct MovieView: View {
                             MovieDetailView(movie: movie)
                         }
                 case let .failed(error):
-                    Text(error)
+                    Text(error.localizedDescription)
                 }
             }
             .navigationTitle("Movies")

@@ -34,19 +34,19 @@ extension ImageLoader {
 
 extension ImageLoader {
     private func fetchAndCacheImage(_ url: URL) async {
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            
-            let uiImage = await Task.detached(priority: .background) {
-                UIImage(data: data)
-            }.value
-            
-            if let uiImage {
-                ImageCache.shared.setObject(uiImage, forKey: url as NSURL)
-                self.image = uiImage
-            }
-        } catch {
-            print("❌ Image load error:", error)
+         do {
+             try await session(url)
+         } catch {
+             print(error)
+         }
+     }
+    
+    private func session(_ url: URL) async throws {
+        let (data, _) = try await URLSession.shared.data(from: url)
+        guard let image = UIImage(data: data) else {
+            throw URLError(.badServerResponse)
         }
+        ImageCache.shared.setObject(image, forKey: url as NSURL)
+        self.image = image
     }
 }

@@ -8,5 +8,5 @@
 enum LoadState<Value: Equatable>: Equatable {
     case loading
     case loaded(Value)
-    case failed(String)
+    case failed(APIError)
 }

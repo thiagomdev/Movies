@@ -1,5 +1,5 @@
 //
-//  MovieRepositoryTest.swift
+//  MovieRepositoryImplTests.swift
 //  MoviesTests
 //
 //  Created by Thiago Monteiro on 4/22/26.
@@ -10,7 +10,7 @@ import Foundation
 @testable import Movies
 
 @Suite("🧪 Movie Repository")
-struct MovieRepositoryTest {
+struct MovieRepositoryImplTests {
     @Test
     func fetchMoviesDecodesArrayAndCallsDataSourceOnce() async throws {
         let (sut, mock) = makeSut()
@@ -24,7 +24,7 @@ struct MovieRepositoryTest {
     }
 }
 
-extension MovieRepositoryTest {
+extension MovieRepositoryImplTests {
     private func makeSut() -> (sut: MovieRepositoryImpl, mock: MovieRepositoryMock) {
         let mock = MovieRepositoryMock()
         let sut = MovieRepositoryImpl(dataSource: mock)
@@ -32,7 +32,7 @@ extension MovieRepositoryTest {
     }
 }
 
-extension MovieRepositoryTest {
+extension MovieRepositoryImplTests {
     private var json: String {
         let json = """
         {
