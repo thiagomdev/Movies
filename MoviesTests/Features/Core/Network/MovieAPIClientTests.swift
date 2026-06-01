@@ -23,7 +23,7 @@ struct MovieAPIClientTests {
         defer { URLProtocolMock.requestHandler = nil }
         URLProtocolMock.requestHandler = { _ in
             let response = HTTPURLResponse(
-                url: anyURL,
+                url: .anyURL,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: nil
@@ -42,7 +42,7 @@ struct MovieAPIClientTests {
         defer { URLProtocolMock.requestHandler = nil }
         URLProtocolMock.requestHandler = { _ in
             let response = HTTPURLResponse(
-                url: anyURL,
+                url: .anyURL,
                 statusCode: 401,
                 httpVersion: nil,
                 headerFields: nil
@@ -63,7 +63,7 @@ struct MovieAPIClientTests {
         defer { URLProtocolMock.requestHandler = nil }
         URLProtocolMock.requestHandler = { _ in
             let response = HTTPURLResponse(
-                url: anyURL,
+                url: .anyURL,
                 statusCode: 404,
                 httpVersion: nil,
                 headerFields: nil
@@ -83,11 +83,5 @@ extension MovieAPIClientTests {
         config.protocolClasses = [URLProtocolMock.self]
         let session = URLSession(configuration: config)
         return MovieAPIClient(session: session)
-    }
-}
-
-extension MovieAPIClientTests {
-    private var anyURL: URL {
-        URL(string: "https://mock.url")!
     }
 }
