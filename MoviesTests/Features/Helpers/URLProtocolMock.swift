@@ -24,24 +24,16 @@ extension URLProtocolMock {
 }
 
 extension URLProtocolMock {
-    override func startLoading() {
-        print("===> DEBUG: 🎯 startLoading chamado para: \(request.url?.absoluteString ?? "nil")")
-        
+    override func startLoading() {        
         guard let handler = URLProtocolMock.requestHandler else {
-            print("===> DEBUG: ❌ requestHandler está NIL")
             return
         }
-        print("===> DEBUG: ✅ requestHandler existe, executando...")
-        
         do {
             let (response, data) = try handler(request)
-            print("===> DEBUG: ✅ handler retornou. Status: \(response.statusCode), bytes: \(data.count)")
             client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
             client?.urlProtocol(self, didLoad: data)
             client?.urlProtocolDidFinishLoading(self)
-            print("===> DEBUG: ✅ finalizou loading")
         } catch {
-            print("===> DEBUG: ❌ handler lançou erro: \(error)")
             client?.urlProtocol(self, didFailWithError: error)
         }
     }
