@@ -13,15 +13,15 @@ import Foundation
 struct MovieAPIClientTests {
     
     init() {
-        URLProtocolMock.requestHandler = nil
+        URLProtocolStub.requestHandler = nil
     }
     
     @Test
     func request_success() async throws {
         let expectedMovies: Movie = .fixture
         let data = try JSONEncoder().encode(expectedMovies)
-        defer { URLProtocolMock.requestHandler = nil }
-        URLProtocolMock.requestHandler = { _ in
+        defer { URLProtocolStub.requestHandler = nil }
+        URLProtocolStub.requestHandler = { _ in
             let response = HTTPURLResponse(
                 url: .anyURL,
                 statusCode: 200,
@@ -39,8 +39,8 @@ struct MovieAPIClientTests {
     
     @Test
     func request_unauthorized() async throws {
-        defer { URLProtocolMock.requestHandler = nil }
-        URLProtocolMock.requestHandler = { _ in
+        defer { URLProtocolStub.requestHandler = nil }
+        URLProtocolStub.requestHandler = { _ in
             let response = HTTPURLResponse(
                 url: .anyURL,
                 statusCode: 401,
@@ -60,8 +60,8 @@ struct MovieAPIClientTests {
     @Test
     func request_notFound() async throws {
         let sut = makeSut()
-        defer { URLProtocolMock.requestHandler = nil }
-        URLProtocolMock.requestHandler = { _ in
+        defer { URLProtocolStub.requestHandler = nil }
+        URLProtocolStub.requestHandler = { _ in
             let response = HTTPURLResponse(
                 url: .anyURL,
                 statusCode: 404,
@@ -80,7 +80,7 @@ struct MovieAPIClientTests {
 extension MovieAPIClientTests {
     private func makeSut() -> MovieAPIClient {
         let config = URLSessionConfiguration.ephemeral
-        config.protocolClasses = [URLProtocolMock.self]
+        config.protocolClasses = [URLProtocolStub.self]
         let session = URLSession(configuration: config)
         return MovieAPIClient(session: session)
     }

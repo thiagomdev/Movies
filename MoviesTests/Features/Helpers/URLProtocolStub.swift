@@ -7,25 +7,25 @@
 
 import Foundation
 
-final class URLProtocolMock: URLProtocol, @unchecked Sendable {
+final class URLProtocolStub: URLProtocol, @unchecked Sendable {
      nonisolated(unsafe) static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
 }
 
-extension URLProtocolMock {
+extension URLProtocolStub {
     override class func canInit(with request: URLRequest) -> Bool {
         return true
     }
 }
 
-extension URLProtocolMock {
+extension URLProtocolStub {
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
     }
 }
 
-extension URLProtocolMock {
+extension URLProtocolStub {
     override func startLoading() {        
-        guard let handler = URLProtocolMock.requestHandler else {
+        guard let handler = URLProtocolStub.requestHandler else {
             return
         }
         do {
@@ -39,7 +39,7 @@ extension URLProtocolMock {
     }
 }
 
-extension URLProtocolMock {
+extension URLProtocolStub {
     override func stopLoading() {
         //: TODO
     }

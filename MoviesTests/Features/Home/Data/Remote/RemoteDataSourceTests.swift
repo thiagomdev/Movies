@@ -12,13 +12,13 @@ import Foundation
 @Suite("🧪 Remote DataSource", .serialized)
 struct RemoteDataSourceTests {
     init() {
-        URLProtocolMock.requestHandler = nil
+        URLProtocolStub.requestHandler = nil
     }
     @Test
     func requestSuccess() async throws {
         let sut = makeSut()
-        defer { URLProtocolMock.requestHandler = nil }
-        URLProtocolMock.requestHandler = { _ in
+        defer { URLProtocolStub.requestHandler = nil }
+        URLProtocolStub.requestHandler = { _ in
             let response = HTTPURLResponse(
                 url: .anyURL, statusCode: 200,
                 httpVersion: "HTTP/1.1",
@@ -37,7 +37,7 @@ struct RemoteDataSourceTests {
 extension RemoteDataSourceTests {
     private func makeSut() -> MovieRemoteDataSource {
         let config = URLSessionConfiguration.ephemeral
-        config.protocolClasses = [URLProtocolMock.self]
+        config.protocolClasses = [URLProtocolStub.self]
         let session = URLSession(configuration: config)
         let client = MovieAPIClient(session: session)
         let sut = MovieRemoteDataSource(apiClient: client)
