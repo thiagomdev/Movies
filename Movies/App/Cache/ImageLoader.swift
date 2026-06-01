@@ -22,12 +22,6 @@ final class ImageLoader {
 extension ImageLoader {
     func load() async {
         guard let url else { return }
-        
-        if let cached = ImageCache.shared.object(forKey: url as NSURL) {
-            self.image = cached
-            return
-        }
-        
         await fetchAndCacheImage(url)
     }
 }
@@ -44,7 +38,7 @@ extension ImageLoader {
     private func session(_ url: URL) async throws {
         let (data, _) = try await URLSession.shared.data(from: url)
         guard let image = UIImage(data: data) else {
-            throw URLError(.badServerResponse)
+            throw APIError.invalidResponse
         }
         ImageCache.shared.setObject(image, forKey: url as NSURL)
         self.image = image

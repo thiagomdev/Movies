@@ -12,9 +12,9 @@ protocol RemoteDataSourceProtocol {
 }
 
 final class MovieRemoteDataSource {
-    private let apiClient: MovieAPIClient
+    private let apiClient: MoviAPIClientProtocol
     
-    init(apiClient: MovieAPIClient) {
+    init(apiClient: MoviAPIClientProtocol) {
         self.apiClient = apiClient
     }
 }
