@@ -17,7 +17,6 @@ struct MovieStoreTests {
         let (sut, spy) = makeSut()
         
         await sut.send(.fetchMovies)
-        await waitForTaskCompletion()
         
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
@@ -30,7 +29,6 @@ struct MovieStoreTests {
         spy.shouldBeReturned = [.fixture]
         
         await sut.send(.fetchMovies)
-        await waitForTaskCompletion()
         
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
@@ -43,7 +41,6 @@ struct MovieStoreTests {
         spy.shouldBeReturned = [.fixture, .fixture, .fixture, .fixture]
         
         await sut.send(.fetchMovies)
-        await waitForTaskCompletion()
         
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
@@ -53,15 +50,27 @@ struct MovieStoreTests {
     @Test
     func sendShouldBeReturnedFailed() async throws {
         let (sut, spy) = makeSut()
-        let anyError: NSError = .init(domain: "anyError", code: 0)
+        let anyError: NSError = .init(domain: "anyError", code: -999)
         spy.shouldFail = .networkError(anyError)
-        
+
         await sut.send(.fetchMovies)
-        await waitForTaskCompletion()
-        
+
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
         #expect(sut.state == .failed(.networkError(anyError)))
+    }
+
+    @Test
+    func sendShouldBeReturnedFailedWhenUnknownErrorIsThrown() async throws {
+        let (sut, spy) = makeSut()
+        let unknownError: NSError = .init(domain: "unknownError", code: -999)
+        spy.shouldFailWithUnknownError = unknownError
+
+        await sut.send(.fetchMovies)
+
+        #expect(spy.executeCalled)
+        #expect(spy.executeCount == 1)
+        #expect(sut.state == .failed(.networkError(unknownError)))
     }
 }
 
@@ -70,11 +79,5 @@ extension MovieStoreTests {
         let spy = MovieStoreSpy()
         let sut = MovieStore(useCase: spy)
         return (sut, spy)
-    }
-}
-
-extension MovieStoreTests {
-    private func waitForTaskCompletion() async {
-        try? await Task.sleep(for: .milliseconds(100))
     }
 }
