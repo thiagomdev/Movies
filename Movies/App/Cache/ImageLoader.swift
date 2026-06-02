@@ -11,11 +11,13 @@ import SwiftUI
 @Observable
 final class ImageLoader {
     var image: UIImage?
-    
+
     private let url: URL?
-    
-    init (url: URL?) {
+    private let session: URLSession
+
+    init(url: URL?, session: URLSession = .shared) {
         self.url = url
+        self.session = session
     }
 }
 
@@ -36,7 +38,7 @@ extension ImageLoader {
      }
     
     private func session(_ url: URL) async throws {
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let (data, _) = try await session.data(from: url)
         guard let image = UIImage(data: data) else {
             throw APIError.invalidResponse
         }
