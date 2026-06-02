@@ -23,14 +23,10 @@ struct MovieAPIClient {
 
 extension MovieAPIClient: MoviAPIClientProtocol {
     func request<T>(_ urlComponents: APIClientEndpoint) async throws -> T where T : Decodable {
-        guard let components = URLComponents(string: urlComponents.baseURL + urlComponents.endpoint) else {
+        guard let url = URLComponents(string: urlComponents.baseURL + urlComponents.endpoint)?.url else {
             throw APIError.invalidURL
         }
-        
-        guard let url = components.url else {
-            throw APIError.invalidURL
-        }
-        
+
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = urlComponents.httpMethod.rawValue
         urlRequest.allHTTPHeaderFields = urlComponents.headers
@@ -72,8 +68,6 @@ extension MovieAPIClient {
     private func performRequest(_ urlRequest: URLRequest) async throws -> (Data, URLResponse) {
         do {
             return try await session.data(for: urlRequest)
-        } catch let error as APIError {
-            throw error
         } catch let urlError as URLError where urlError.code == .cancelled {
             throw CancellationError()
         } catch {

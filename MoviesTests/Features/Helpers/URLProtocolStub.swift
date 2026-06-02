@@ -8,7 +8,7 @@
 import Foundation
 
 final class URLProtocolStub: URLProtocol, @unchecked Sendable {
-     nonisolated(unsafe) static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
+     nonisolated(unsafe) static var requestHandler: ((URLRequest) throws -> (URLResponse, Data))?
 }
 
 extension URLProtocolStub {

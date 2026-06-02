@@ -158,6 +158,40 @@ struct MovieAPIClientTests {
             let _: Movie = try await sut.request(InvalidURLEndpoint())
         }
     }
+
+    @Test
+    func request_cancellation() async throws {
+        defer { URLProtocolStub.requestHandler = nil }
+        URLProtocolStub.requestHandler = { _ in
+            throw URLError(.cancelled)
+        }
+
+        let sut = makeSut()
+
+        await #expect(throws: CancellationError.self) {
+            let _: Movie = try await sut.request(MoviesEndpoint.movies)
+        }
+    }
+
+    @Test
+    func request_invalidResponse() async throws {
+        defer { URLProtocolStub.requestHandler = nil }
+        URLProtocolStub.requestHandler = { _ in
+            let response = URLResponse(
+                url: .anyURL,
+                mimeType: nil,
+                expectedContentLength: 0,
+                textEncodingName: nil
+            )
+            return (response, Data())
+        }
+
+        let sut = makeSut()
+
+        await #expect(throws: APIError.invalidResponse) {
+            let _: Movie = try await sut.request(MoviesEndpoint.movies)
+        }
+    }
 }
 
 private struct InvalidURLEndpoint: APIClientEndpoint {
