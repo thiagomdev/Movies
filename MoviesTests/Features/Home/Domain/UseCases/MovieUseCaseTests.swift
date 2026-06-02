@@ -15,7 +15,7 @@ struct MovieUseCaseTests {
         let (sut, mock) = makeSut()
         mock.expected = [.fixture]
         
-        let result = try await sut.execute()
+        let result = try await sut.execute(.movies)
         
         #expect(mock.fetchMoviesCalled)
         #expect(mock.fetchMoviesCount == 1)

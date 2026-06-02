@@ -33,7 +33,7 @@ extension MovieStore {
     private func fetchMovies() async {
         state = .loading
         do {
-            let movies = try await useCase.execute()
+            let movies = try await useCase.execute(.movies)
             state = .loaded(movies)
         } catch let error as APIError {
             state = .failed(error)

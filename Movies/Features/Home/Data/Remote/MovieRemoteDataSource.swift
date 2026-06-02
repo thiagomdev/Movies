@@ -7,8 +7,12 @@
 
 import Foundation
 
+enum RemoteDataSource {
+    case movie
+}
+
 protocol RemoteDataSourceProtocol {
-    func fetchMovies() async throws -> Movie
+    func fetch(movie: RemoteDataSource) async throws -> Movie
 }
 
 final class MovieRemoteDataSource {
@@ -20,7 +24,10 @@ final class MovieRemoteDataSource {
 }
 
 extension MovieRemoteDataSource: RemoteDataSourceProtocol {
-    func fetchMovies() async throws -> Movie {
-        try await apiClient.request(MoviesEndpoint.movies)
+    func fetch(movie: RemoteDataSource) async throws -> Movie {
+        switch movie {
+        case .movie:
+            try await apiClient.request(MoviesEndpoint.movies)
+        }
     }
 }

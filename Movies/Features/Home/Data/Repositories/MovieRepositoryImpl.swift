@@ -17,6 +17,6 @@ final class MovieRepositoryImpl {
 
 extension MovieRepositoryImpl: MovieRepositoryProtocol {
     func fetchMovies() async throws -> [MovieResult] {
-        return try await dataSource.fetchMovies().results
+        return try await dataSource.fetch(movie: .movie).results
     }
 }

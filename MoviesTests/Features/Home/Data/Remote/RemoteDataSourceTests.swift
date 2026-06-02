@@ -28,7 +28,7 @@ struct RemoteDataSourceTests {
             return (response, data)
         }
 
-        let data = try await sut.fetchMovies()
+        let data = try await sut.fetch(movie: .movie)
 
         #expect(data.results.isEmpty == false)
     }
