@@ -70,11 +70,104 @@ struct MovieAPIClientTests {
             )!
             return (response, Data())
         }
-        
+
         await #expect(throws: APIError.notFound) {
             let _: [Movie] = try await sut.request(MoviesEndpoint.movies)
         }
     }
+
+    @Test
+    func request_rateLimited() async throws {
+        defer { URLProtocolStub.requestHandler = nil }
+        URLProtocolStub.requestHandler = { _ in
+            let response = HTTPURLResponse(
+                url: .anyURL,
+                statusCode: 429,
+                httpVersion: nil,
+                headerFields: nil
+            )!
+            return (response, Data())
+        }
+
+        let sut = makeSut()
+
+        await #expect(throws: APIError.rateLimited) {
+            let _: Movie = try await sut.request(MoviesEndpoint.movies)
+        }
+    }
+
+    @Test
+    func request_httpError() async throws {
+        defer { URLProtocolStub.requestHandler = nil }
+        URLProtocolStub.requestHandler = { _ in
+            let response = HTTPURLResponse(
+                url: .anyURL,
+                statusCode: 500,
+                httpVersion: nil,
+                headerFields: nil
+            )!
+            return (response, Data())
+        }
+
+        let sut = makeSut()
+
+        await #expect(throws: APIError.httpError(statusCode: 500)) {
+            let _: Movie = try await sut.request(MoviesEndpoint.movies)
+        }
+    }
+
+    @Test
+    func request_decodingError() async throws {
+        defer { URLProtocolStub.requestHandler = nil }
+        URLProtocolStub.requestHandler = { _ in
+            let response = HTTPURLResponse(
+                url: .anyURL,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: nil
+            )!
+            return (response, Data("not a valid json".utf8))
+        }
+
+        let sut = makeSut()
+
+        await #expect(throws: APIError.self) {
+            let _: Movie = try await sut.request(MoviesEndpoint.movies)
+        }
+    }
+
+    @Test
+    func request_networkError() async throws {
+        defer { URLProtocolStub.requestHandler = nil }
+        URLProtocolStub.requestHandler = { _ in
+            throw URLError(.notConnectedToInternet)
+        }
+
+        let sut = makeSut()
+
+        await #expect(throws: APIError.self) {
+            let _: Movie = try await sut.request(MoviesEndpoint.movies)
+        }
+    }
+
+    @Test
+    func request_invalidURL() async throws {
+        let sut = makeSut()
+
+        await #expect(throws: APIError.invalidURL) {
+            let _: Movie = try await sut.request(InvalidURLEndpoint())
+        }
+    }
+}
+
+private struct InvalidURLEndpoint: APIClientEndpoint {
+    var baseURL: String { "http://[bad" }
+    var endpoint: String { "" }
+    var httpMethod: HTTPMethod { .get }
+    var parameters: [String: String]? { nil }
+    var headers: [String: String]? { nil }
+    var body: Data? { nil }
+    var timeout: TimeInterval { 3 }
 }
 
 extension MovieAPIClientTests {
