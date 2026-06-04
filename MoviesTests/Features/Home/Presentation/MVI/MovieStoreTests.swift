@@ -11,7 +11,7 @@ import Foundation
 
 @MainActor
 @Suite("🧪 Movie Store", .serialized)
-struct MovieStoreTests {
+final class MovieStoreTests: LeakTrackerSuite {
     @Test
     func sendShouldBeReturnedEmpty() async {
         let (sut, spy) = makeSut()
@@ -75,9 +75,13 @@ struct MovieStoreTests {
 }
 
 extension MovieStoreTests {
-    private func makeSut() -> (sut: MovieStore, spy: MovieStoreSpy) {
+    private func makeSut(sourceLocation: SourceLocation = #_sourceLocation) -> (sut: MovieStore, spy: MovieStoreSpy) {
         let spy = MovieStoreSpy()
         let sut = MovieStore(useCase: spy)
+        
+        trackForMemoryLeak(sut, source: sourceLocation)
+        trackForMemoryLeak(spy, source: sourceLocation)
+        
         return (sut, spy)
     }
 }
