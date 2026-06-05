@@ -9,7 +9,7 @@ import Testing
 @testable import Movies
 
 @Suite("🧪 Movie UseCase")
-struct MovieUseCaseTests {
+final class MovieUseCaseTests: LeakTrackerSuite {
     @Test
     func executeShouldReturnResultMovie() async throws {
         let (sut, mock) = makeSut()
@@ -25,9 +25,13 @@ struct MovieUseCaseTests {
 }
 
 extension MovieUseCaseTests {
-    private func makeSut() -> (sut: MovieUseCase, mock: MovieUseCaseMock) {
+    private func makeSut(sourceLocation: SourceLocation = #_sourceLocation) -> (sut: MovieUseCase, mock: MovieUseCaseMock) {
         let mock = MovieUseCaseMock()
         let sut = MovieUseCase(repository: mock)
+        
+        trackForMemoryLeak(sut, source: sourceLocation)
+        trackForMemoryLeak(mock, source: sourceLocation)
+        
         return (sut, mock)
     }
 }

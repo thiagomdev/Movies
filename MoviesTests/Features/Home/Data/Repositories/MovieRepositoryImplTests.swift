@@ -10,7 +10,7 @@ import Foundation
 @testable import Movies
 
 @Suite("🧪 Movie Repository")
-struct MovieRepositoryImplTests {
+final class MovieRepositoryImplTests: LeakTrackerSuite {
     @Test
     func fetchMoviesDecodesArrayAndCallsDataSourceOnce() async throws {
         let (sut, mock) = makeSut()
@@ -25,9 +25,13 @@ struct MovieRepositoryImplTests {
 }
 
 extension MovieRepositoryImplTests {
-    private func makeSut() -> (sut: MovieRepositoryImpl, mock: MovieRepositoryMock) {
+    private func makeSut(sourceLocation: SourceLocation = #_sourceLocation) -> (sut: MovieRepositoryImpl, mock: MovieRepositoryMock) {
         let mock = MovieRepositoryMock()
         let sut = MovieRepositoryImpl(dataSource: mock)
+        
+        trackForMemoryLeak(sut, source: sourceLocation)
+        trackForMemoryLeak(mock, source: sourceLocation)
+        
         return (sut, mock)
     }
 }

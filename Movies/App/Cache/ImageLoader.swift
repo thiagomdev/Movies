@@ -36,7 +36,9 @@ extension ImageLoader {
              print(error)
          }
      }
-    
+}
+
+extension ImageLoader {
     private func session(_ url: URL) async throws {
         let (data, _) = try await session.data(from: url)
         guard let image = UIImage(data: data) else {

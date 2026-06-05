@@ -9,9 +9,9 @@ import Testing
 
 final class MemoryLeakDetection<T: AnyObject> {
     private weak var instance: T?
-    private var sourceLocation: SourceLocation
-    
-    init(instance: T? = nil, sourceLocation: SourceLocation) {
+    private let sourceLocation: SourceLocation
+
+    init(instance: T?, sourceLocation: SourceLocation) {
         self.instance = instance
         self.sourceLocation = sourceLocation
     }
