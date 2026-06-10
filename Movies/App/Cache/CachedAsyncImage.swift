@@ -9,10 +9,10 @@ import SwiftUI
 
 struct CachedAsyncImage: View {
 
-    @StateObject private var loader: ImageLoader
+    @State private var loader: ImageLoader
 
     init(url: URL?) {
-        _loader = StateObject(wrappedValue: ImageLoader(url: url))
+        _loader = State(wrappedValue: ImageLoader(url: url))
     }
 
     var body: some View {

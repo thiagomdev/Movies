@@ -7,20 +7,27 @@
 
 import Foundation
 
+enum RemoteDataSource {
+    case movie
+}
+
 protocol RemoteDataSourceProtocol {
-    func fetchMovies() async throws -> Movie
+    func fetch(movie: RemoteDataSource) async throws -> Movie
 }
 
 final class MovieRemoteDataSource {
-    private let apiClient: MovieAPIClient
+    private let apiClient: MoviAPIClientProtocol
     
-    init(apiClient: MovieAPIClient) {
+    init(apiClient: MoviAPIClientProtocol) {
         self.apiClient = apiClient
     }
 }
 
 extension MovieRemoteDataSource: RemoteDataSourceProtocol {
-    func fetchMovies() async throws -> Movie {
-        try await apiClient.request(MoviesEndpoint.movies)
+    func fetch(movie: RemoteDataSource) async throws -> Movie {
+        switch movie {
+        case .movie:
+            try await apiClient.request(MoviesEndpoint.movies)
+        }
     }
 }

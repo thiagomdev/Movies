@@ -1,32 +1,33 @@
 //
-//  RemoteDataSourceMock.swift
+//  URLProtocolMock.swift
 //  Movies
 //
-//  Created by Thiago Monteiro on 4/17/26.
+//  Created by Thiago Monteiro on 5/19/26.
 //
 
 import Foundation
 
-final class MockURLProtocol: URLProtocol {
-    static var requestHandlers = [URL: (URLRequest) throws -> (HTTPURLResponse, Data)]()
+final class URLProtocolStub: URLProtocol, @unchecked Sendable {
+     nonisolated(unsafe) static var requestHandler: ((URLRequest) throws -> (URLResponse, Data))?
+}
 
+extension URLProtocolStub {
     override class func canInit(with request: URLRequest) -> Bool {
         return true
     }
+}
 
+extension URLProtocolStub {
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
     }
+}
 
-    override func startLoading() {
-        guard
-            let url = request.url,
-            let handler = MockURLProtocol.requestHandlers[url]
-        else {
-            client?.urlProtocol(self, didFailWithError: URLError(.badURL))
+extension URLProtocolStub {
+    override func startLoading() {        
+        guard let handler = URLProtocolStub.requestHandler else {
             return
         }
-
         do {
             let (response, data) = try handler(request)
             client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
@@ -36,6 +37,10 @@ final class MockURLProtocol: URLProtocol {
             client?.urlProtocol(self, didFailWithError: error)
         }
     }
+}
 
-    override func stopLoading() {}
+extension URLProtocolStub {
+    override func stopLoading() {
+        //: TODO
+    }
 }

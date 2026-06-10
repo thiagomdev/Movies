@@ -6,47 +6,45 @@
 //
 
 import SwiftUI
-import Combine
 
 @MainActor
-final class ImageLoader: ObservableObject {
-    @Published var image: UIImage?
-    
+@Observable
+final class ImageLoader {
+    var image: UIImage?
+
     private let url: URL?
-    
-    init (url: URL?) {
+    private let session: URLSession
+
+    init(url: URL?, session: URLSession = .shared) {
         self.url = url
+        self.session = session
     }
 }
 
 extension ImageLoader {
     func load() async {
         guard let url else { return }
-        
-        if let cached = ImageCache.shared.object(forKey: url as NSURL) {
-            self.image = cached
-            return
-        }
-        
         await fetchAndCacheImage(url)
     }
 }
 
 extension ImageLoader {
     private func fetchAndCacheImage(_ url: URL) async {
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            
-            let uiImage = await Task.detached(priority: .background) {
-                UIImage(data: data)
-            }.value
-            
-            if let uiImage {
-                ImageCache.shared.setObject(uiImage, forKey: url as NSURL)
-                self.image = uiImage
-            }
-        } catch {
-            print("❌ Image load error:", error)
+         do {
+             try await session(url)
+         } catch {
+             print(error)
+         }
+     }
+}
+
+extension ImageLoader {
+    private func session(_ url: URL) async throws {
+        let (data, _) = try await session.data(from: url)
+        guard let image = UIImage(data: data) else {
+            throw APIError.invalidResponse
         }
+        ImageCache.shared.setObject(image, forKey: url as NSURL)
+        self.image = image
     }
 }

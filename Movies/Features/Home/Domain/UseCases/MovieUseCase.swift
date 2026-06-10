@@ -7,8 +7,12 @@
 
 import Foundation
 
+enum MovieUSeCase {
+    case movies
+}
+
 protocol MovieUseCaseProtocol {
-    func execute() async throws -> [MovieResult]
+    func execute(_ actions: MovieUSeCase) async throws -> [MovieResult]
 }
 
 final class MovieUseCase {
@@ -20,8 +24,10 @@ final class MovieUseCase {
 }
 
 extension MovieUseCase: MovieUseCaseProtocol {
-    func execute() async throws -> [MovieResult] {
-        let movies = try await repository.fetchMovies()
-        return movies
+    func execute(_ actions: MovieUSeCase) async throws -> [MovieResult] {
+        switch actions {
+        case .movies:
+            try await repository.fetchMovies()
+        }
     }
 }

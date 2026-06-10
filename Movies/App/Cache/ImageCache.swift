@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-import Foundation
 
-final class ImageCache {
+enum ImageCache {
     static let shared = NSCache<NSURL, UIImage>()
 }

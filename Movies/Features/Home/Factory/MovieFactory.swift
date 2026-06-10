@@ -8,6 +8,7 @@
 import SwiftUI
 
 enum MovieFactory {
+    @MainActor
     static func make() -> some View {
         let apiClient = MovieAPIClient(session: .shared)
         let dataSource = MovieRemoteDataSource(apiClient: apiClient)

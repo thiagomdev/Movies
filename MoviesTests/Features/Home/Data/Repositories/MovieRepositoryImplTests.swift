@@ -1,5 +1,5 @@
 //
-//  MovieRepositoryTest.swift
+//  MovieRepositoryImplTests.swift
 //  MoviesTests
 //
 //  Created by Thiago Monteiro on 4/22/26.
@@ -9,9 +9,8 @@ import Testing
 import Foundation
 @testable import Movies
 
-@MainActor
 @Suite("🧪 Movie Repository")
-struct MovieRepositoryTest {
+final class MovieRepositoryImplTests: LeakTrackerSuite {
     @Test
     func fetchMoviesDecodesArrayAndCallsDataSourceOnce() async throws {
         let (sut, mock) = makeSut()
@@ -25,15 +24,19 @@ struct MovieRepositoryTest {
     }
 }
 
-extension MovieRepositoryTest {
-    private func makeSut() -> (sut: MovieRepositoryImpl, mock: MovieRepositoryMock) {
+extension MovieRepositoryImplTests {
+    private func makeSut(sourceLocation: SourceLocation = #_sourceLocation) -> (sut: MovieRepositoryImpl, mock: MovieRepositoryMock) {
         let mock = MovieRepositoryMock()
         let sut = MovieRepositoryImpl(dataSource: mock)
+        
+        trackForMemoryLeak(sut, source: sourceLocation)
+        trackForMemoryLeak(mock, source: sourceLocation)
+        
         return (sut, mock)
     }
 }
 
-extension MovieRepositoryTest {
+extension MovieRepositoryImplTests {
     private var json: String {
         let json = """
         {

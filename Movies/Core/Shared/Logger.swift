@@ -11,33 +11,33 @@ enum Logger {
     static func log(request: URLRequest?, response: URLResponse?, data: Data?, error: Error?, verbose: Bool =  true) {
         print("-------------------- 🚀 START OF REQUEST 🚀 --------------------")
         if let url = request?.url {
-            print("===> REQUEST URL: \(url.absoluteString)")
+            print("===> DEBUG: REQUEST URL: \(url.absoluteString)")
         }
         
         if let method = request?.httpMethod {
-            print("===> HTTP METHOD: \(method)")
+            print("===> DEBUG: HTTP METHOD: \(method)")
         }
         
         if verbose, let headers = request?.allHTTPHeaderFields {
-            print("===> HEADERS: \(headers)")
+            print("===> DEBUG: HEADERS: \(headers)")
         }
         
         if verbose, let body = request?.httpBody, let bodyString = String(data: body, encoding: .utf8) {
-            print("===> BODY STRING: \(bodyString)")
+            print("===> DEBUG: BODY STRING: \(bodyString)")
         }
         
         if let httpresponse = response as? HTTPURLResponse {
             let statusCode = httpresponse.statusCode
             let statusIcon = (200..<300).contains(statusCode) ? "✅" : "❌"
-            print("===> STATUS CODE: \(statusCode) \(statusIcon)")
+            print("===> DEBUG: STATUS CODE: \(statusCode) \(statusIcon)")
         } else if let error {
-            print("🛑 Error: \(error.localizedDescription)")
+            print("===> 🛑 DEBUG: Error: \(error.localizedDescription)")
         } else {
-            print("🛑 Error: Not RESPONSE and no ERROR")
+            print("===> 🛑 DEBUG: Error: Not RESPONSE and no ERROR")
         }
         
         if verbose, let headers = (response as? HTTPURLResponse)?.allHeaderFields as? [String: Any] {
-            print("===> RESPONSE HEADERS: \(headers)")
+            print("===> DEBUG: RESPONSE HEADERS: \(headers)")
         }
         
         if let data = data {
@@ -45,10 +45,10 @@ enum Logger {
                 let jsonObject = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
                 let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
                 if let jsonString = String(data: jsonData, encoding: .utf8) {
-                    print("===> JSON RESPONSE: \(jsonString)")
+                    print("===> DEBUG: JSON RESPONSE: \(jsonString)")
                 }
             } catch let serializationError {
-                print("===> Failed to serialize JSON: \(serializationError)")
+                print("===> DEBUG: Failed to serialize JSON: \(serializationError)")
             }
         }
         print("-------------------- 🚀 END OF REQUEST 🚀 --------------------")
@@ -56,8 +56,8 @@ enum Logger {
     
     static func logError(error: Error, url: URL?) {
         print("-------------------- ❌ END OF REQUEST ❌ --------------------")
-        print("===> Failed URL: \(String(describing: url))")
-        print("===> Error: \(error.localizedDescription)")
+        print("===> DEBUG: Failed URL: \(String(describing: url))")
+        print("===> DEBUG: Error: \(error.localizedDescription)")
         print("-------------------- ❌ END OF ERROR ❌ ----------------------")
     }
 }

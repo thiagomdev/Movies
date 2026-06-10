@@ -4,7 +4,9 @@
       "id" : "931B852B-2EC0-4ADE-AEB6-A1B9153357C1",
       "name" : "Test Scheme Action",
       "options" : {
-
+        "distributor" : "com.apple.TestFlight",
+        "mallocStackLoggingOptions" : null,
+        "uiTestingScreenshotsLifetime" : "keepNever"
       }
     }
   ],
@@ -18,6 +20,9 @@
         }
       ]
     },
+    "mallocStackLoggingOptions" : {
+      "loggingType" : "liveAllocations"
+    },
     "performanceAntipatternCheckerEnabled" : true,
     "targetForVariableExpansion" : {
       "containerPath" : "container:Movies.xcodeproj",
@@ -27,7 +32,7 @@
   },
   "testTargets" : [
     {
-      "parallelizable" : true,
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:Movies.xcodeproj",
         "identifier" : "AA8227362F9067F60036DA9B",

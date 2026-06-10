@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MovieView: View {
-    @StateObject var store: MovieStore
+    @State var store: MovieStore
     
     var body: some View {
         NavigationStack {
@@ -23,16 +23,13 @@ struct MovieView: View {
                             MovieDetailView(movie: movie)
                         }
                 case let .failed(error):
-                    Text(error)
+                    Text(error.localizedDescription)
                 }
             }
             .navigationTitle("Movies")
         }
-        .onAppear {
-            store.send(.fetchMovies)
-        }
-        .onDisappear {
-            store.cancelTasks()
+        .task {
+            await store.send(.fetchMovies)
         }
     }
 }

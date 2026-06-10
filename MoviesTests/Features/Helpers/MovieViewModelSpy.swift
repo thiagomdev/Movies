@@ -10,14 +10,17 @@
 final class MovieViewModelSpy: MovieUseCaseProtocol {
     var expected: [MovieResult] = []
     var errorToThrow: Error?
+    var expectedActions: MovieUSeCase?
     
     private(set) var executeCalled: Bool = false
     private(set) var executeCount: Int = 0
     
-    func execute() async throws -> [MovieResult] {
+    func execute(_ actions: MovieUSeCase) async throws -> [MovieResult] {
         executeCalled = true
         executeCount += 1
         
+        expectedActions = actions
+      
         if let error = errorToThrow {
             throw error
         }

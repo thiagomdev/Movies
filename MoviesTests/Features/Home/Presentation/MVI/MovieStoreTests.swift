@@ -11,17 +11,17 @@ import Foundation
 
 @MainActor
 @Suite("🧪 Movie Store", .serialized)
-struct MovieStoreTests {
+final class MovieStoreTests: LeakTrackerSuite {
     @Test
-    func sendShouldBeReturnedEmpty() async throws {
+    func sendShouldBeReturnedEmpty() async {
         let (sut, spy) = makeSut()
         
-        sut.send(.fetchMovies)
-        await waitForTaskCompletion()
+        await sut.send(.fetchMovies)
         
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
         #expect(spy.shouldBeReturned.isEmpty)
+        #expect(spy.shouldBeReturned.count == .zero)
     }
     
     @Test
@@ -29,12 +29,12 @@ struct MovieStoreTests {
         let (sut, spy) = makeSut()
         spy.shouldBeReturned = [.fixture]
         
-        sut.send(.fetchMovies)
-        await waitForTaskCompletion()
+        await sut.send(.fetchMovies)
         
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
         #expect(spy.shouldBeReturned.isEmpty == false)
+        #expect(spy.shouldBeReturned.count == 1)
     }
     
     @Test
@@ -42,38 +42,49 @@ struct MovieStoreTests {
         let (sut, spy) = makeSut()
         spy.shouldBeReturned = [.fixture, .fixture, .fixture, .fixture]
         
-        sut.send(.fetchMovies)
-        await waitForTaskCompletion()
+        await sut.send(.fetchMovies)
         
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
         #expect(spy.shouldBeReturned.isEmpty == false)
+        #expect(spy.shouldBeReturned.count == 4)
     }
     
     @Test
     func sendShouldBeReturnedFailed() async throws {
         let (sut, spy) = makeSut()
-        spy.shouldFail = NSError(domain: "error", code: 0)
-        
-        sut.send(.fetchMovies)
-        await waitForTaskCompletion()
-        
+        let anyError: NSError = .init(domain: "anyError", code: -999)
+        spy.shouldFail = .networkError(anyError)
+
+        await sut.send(.fetchMovies)
+
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
-        #expect(sut.state == .failed("The operation couldn’t be completed. (error error 0.)"))
+        #expect(sut.state == .failed(.networkError(anyError)))
+    }
+
+    @Test
+    func sendShouldBeReturnedFailedWhenUnknownErrorIsThrown() async throws {
+        let (sut, spy) = makeSut()
+        let unknownError: NSError = .init(domain: "unknownError", code: -999)
+        spy.shouldFailWithUnknownError = unknownError
+
+        await sut.send(.fetchMovies)
+
+        #expect(spy.executeCalled)
+        #expect(spy.executeCount == 1)
+        #expect(sut.state == .failed(.networkError(unknownError)))
     }
 }
 
 extension MovieStoreTests {
-    private func makeSut() -> (sut: MovieStore, spy: MovieStoreSpy) {
+    private func makeSut(sourceLocation: SourceLocation = #_sourceLocation) -> (sut: MovieStore, spy: MovieStoreSpy) {
         let spy = MovieStoreSpy()
         let sut = MovieStore(useCase: spy)
+        
+        trackForMemoryLeak(sut, source: sourceLocation)
+        trackForMemoryLeak(spy, source: sourceLocation)
+        
         return (sut, spy)
-    }
-}
-
-extension MovieStoreTests {
-    private func waitForTaskCompletion() async {
-        try? await Task.sleep(for: .milliseconds(100))
     }
 }
