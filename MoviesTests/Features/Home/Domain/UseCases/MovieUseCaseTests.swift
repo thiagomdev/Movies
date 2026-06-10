@@ -22,6 +22,18 @@ final class MovieUseCaseTests: LeakTrackerSuite {
         #expect(result == [.fixture])
         #expect(result.isEmpty == false)
     }
+    
+    @Test
+    func executeShouldBeReturnedEmptyValue() async throws {
+        let (sut, mock) = makeSut()
+        
+        let result = try await sut.execute(.movies)
+        
+        #expect(mock.fetchMoviesCalled)
+        #expect(mock.fetchMoviesCount == 1)
+        #expect(result == [])
+        #expect(result.isEmpty)
+    }
 }
 
 extension MovieUseCaseTests {

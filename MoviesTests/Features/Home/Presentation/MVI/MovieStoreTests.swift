@@ -21,6 +21,7 @@ final class MovieStoreTests: LeakTrackerSuite {
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
         #expect(spy.shouldBeReturned.isEmpty)
+        #expect(spy.shouldBeReturned.count == .zero)
     }
     
     @Test
@@ -33,6 +34,7 @@ final class MovieStoreTests: LeakTrackerSuite {
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
         #expect(spy.shouldBeReturned.isEmpty == false)
+        #expect(spy.shouldBeReturned.count == 1)
     }
     
     @Test
@@ -45,6 +47,7 @@ final class MovieStoreTests: LeakTrackerSuite {
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
         #expect(spy.shouldBeReturned.isEmpty == false)
+        #expect(spy.shouldBeReturned.count == 4)
     }
     
     @Test
