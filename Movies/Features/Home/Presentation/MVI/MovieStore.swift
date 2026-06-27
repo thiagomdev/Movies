@@ -10,8 +10,8 @@ import Foundation
 @MainActor
 @Observable
 final class MovieStore {
-    private(set) var state: LoadState<[MovieResult]> = .loading
     private let useCase: MovieUseCaseProtocol
+    private(set) var state: LoadState<[MovieResult]> = .loading
     
     init(useCase: MovieUseCaseProtocol) {
         self.useCase = useCase
