@@ -193,17 +193,6 @@ struct MovieAPIClientTests {
         }
     }
 }
-
-private struct InvalidURLEndpointStub: APIClientEndpoint {
-    var baseURL: String { "http://[bad" }
-    var endpoint: String { "" }
-    var httpMethod: HTTPMethod { .get }
-    var parameters: [String: String]? { nil }
-    var headers: [String: String]? { nil }
-    var body: Data? { nil }
-    var timeout: TimeInterval { 3 }
-}
-
 extension MovieAPIClientTests {
     private func makeSut() -> MovieAPIClient {
         let config = URLSessionConfiguration.ephemeral
