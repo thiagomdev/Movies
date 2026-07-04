@@ -155,7 +155,7 @@ struct MovieAPIClientTests {
         let sut = makeSut()
 
         await #expect(throws: APIError.invalidURL) {
-            let _: Movie = try await sut.request(InvalidURLEndpoint())
+            let _: Movie = try await sut.request(InvalidURLEndpointStub())
         }
     }
 
@@ -194,7 +194,7 @@ struct MovieAPIClientTests {
     }
 }
 
-private struct InvalidURLEndpoint: APIClientEndpoint {
+private struct InvalidURLEndpointStub: APIClientEndpoint {
     var baseURL: String { "http://[bad" }
     var endpoint: String { "" }
     var httpMethod: HTTPMethod { .get }
