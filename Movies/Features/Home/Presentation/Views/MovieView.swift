@@ -16,6 +16,7 @@ struct MovieView: View {
                 switch store.state {
                 case .loading:
                     ProgressView()
+                        .accessibilityIdentifier("movieLoadingIndicator")
                 case let .loaded(movies):
                     MovieList(movies: movies)
                         .listStyle(.inset)
@@ -24,6 +25,7 @@ struct MovieView: View {
                         }
                 case let .failed(error):
                     Text(error.localizedDescription)
+                        .accessibilityIdentifier("movieErrorMessage")
                 }
             }
             .navigationTitle("Movies")
