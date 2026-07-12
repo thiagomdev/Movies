@@ -7,16 +7,16 @@
 
 import Foundation
 
-final class MovieRepositoryImpl {
+public final class MovieRepositoryImpl {
     private let dataSource: RemoteDataSourceProtocol
     
-    init(dataSource: RemoteDataSourceProtocol) {
+    public init(dataSource: RemoteDataSourceProtocol) {
         self.dataSource = dataSource
     }
 }
 
 extension MovieRepositoryImpl: MovieRepositoryProtocol {
-    func fetchMovies() async throws -> [MovieResult] {
+    public func fetchMovies() async throws -> [MovieResult] {
         return try await dataSource.fetch(movie: .movie).results
     }
 }

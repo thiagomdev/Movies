@@ -8,7 +8,7 @@
 import Foundation
 
 extension URL {
-    static var anyURL: Self {
+    public static var anyURL: Self {
         return URL(string: "https://mock.url")!
     }
 }

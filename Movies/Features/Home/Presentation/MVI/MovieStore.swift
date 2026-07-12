@@ -9,17 +9,17 @@ import Foundation
 
 @MainActor
 @Observable
-final class MovieStore {
+public final class MovieStore {
     private let useCase: MovieUseCaseProtocol
-    private(set) var state: LoadState<[MovieResult]> = .loading
+    public var state: LoadState<[MovieResult]> = .loading
     
-    init(useCase: MovieUseCaseProtocol) {
+    public init(useCase: MovieUseCaseProtocol) {
         self.useCase = useCase
     }
 }
 
 extension MovieStore {
-    func send(_ intent: MovieIntent) async {
+    public func send(_ intent: MovieIntent) async {
         switch intent {
         case .fetchMovies:
             await fetchMovies()

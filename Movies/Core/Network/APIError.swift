@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - API Error
-enum APIError: LocalizedError, Equatable {
+public enum APIError: LocalizedError, Equatable {
     case invalidURL
     case invalidResponse
     case httpError(statusCode: Int)
@@ -18,7 +18,7 @@ enum APIError: LocalizedError, Equatable {
     case notFound
     case rateLimited
     
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .invalidURL:
             return "The request URL is invalid."
@@ -39,7 +39,7 @@ enum APIError: LocalizedError, Equatable {
         }
     }
 
-    static func == (lhs: APIError, rhs: APIError) -> Bool {
+    public static func == (lhs: APIError, rhs: APIError) -> Bool {
         switch (lhs, rhs) {
         case (.invalidURL, .invalidURL),
              (.invalidResponse, .invalidResponse),

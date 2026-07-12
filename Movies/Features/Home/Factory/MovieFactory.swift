@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-enum MovieFactory {
+public enum MovieFactory {
     @MainActor
-    static func make() -> some View {
+    public static func make() -> some View {
         let apiClient = MovieAPIClient(session: .shared)
         let dataSource = MovieRemoteDataSource(apiClient: apiClient)
         let repository = MovieRepositoryImpl(dataSource: dataSource)

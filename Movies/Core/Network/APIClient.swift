@@ -7,22 +7,22 @@
 
 import Foundation
 
-protocol MoviAPIClientProtocol {
+public protocol MoviAPIClientProtocol {
     func request<T: Decodable>(_ urlComponents: APIClientEndpoint) async throws -> T
 }
 
-struct MovieAPIClient {
+public struct MovieAPIClient {
     private let session: URLSession
     private let decoder: JSONDecoder
     
-    init(session: URLSession) {
+    public init(session: URLSession) {
         self.session = session
         self.decoder = JSONDecoder()
     }
 }
 
 extension MovieAPIClient: MoviAPIClientProtocol {
-    func request<T>(_ urlComponents: APIClientEndpoint) async throws -> T where T : Decodable {
+    public func request<T>(_ urlComponents: APIClientEndpoint) async throws -> T where T : Decodable {
         guard let url = URLComponents(string: urlComponents.baseURL + urlComponents.endpoint)?.url else {
             throw APIError.invalidURL
         }

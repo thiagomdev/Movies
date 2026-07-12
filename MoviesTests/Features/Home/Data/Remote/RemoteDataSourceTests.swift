@@ -7,7 +7,7 @@
 
 import Testing
 import Foundation
-@testable import Movies
+import Movies
 
 @Suite("🧪 Remote DataSource", .serialized)
 struct RemoteDataSourceTests {

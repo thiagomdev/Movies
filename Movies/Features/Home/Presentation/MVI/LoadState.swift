@@ -5,7 +5,7 @@
 //  Created by Thiago Monteiro on 5/18/26.
 //
 
-enum LoadState<Value: Equatable>: Equatable {
+public enum LoadState<Value: Equatable>: Equatable {
     case loading
     case loaded(Value)
     case failed(APIError)
