@@ -8,7 +8,7 @@
 import Testing
 import Foundation
 import UIKit
-@testable import Movies
+import Movies
 
 @MainActor
 @Suite("🧪 Image Loader", .serialized)

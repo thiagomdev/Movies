@@ -9,20 +9,20 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class ImageLoader {
-    var image: UIImage?
+public final class ImageLoader {
+    public var image: UIImage?
 
     private let url: URL?
     private let session: URLSession
 
-    init(url: URL?, session: URLSession = .shared) {
+    public init(url: URL?, session: URLSession = .shared) {
         self.url = url
         self.session = session
     }
 }
 
 extension ImageLoader {
-    func load() async {
+    public func load() async {
         guard let url else { return }
         await fetchAndCacheImage(url)
     }

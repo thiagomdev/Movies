@@ -7,8 +7,8 @@
 
 import Foundation
 
-enum Logger {
-    static func log(request: URLRequest?, response: URLResponse?, data: Data?, error: Error?, verbose: Bool =  true) {
+public enum Logger {
+    public static func log(request: URLRequest?, response: URLResponse?, data: Data?, error: Error?, verbose: Bool =  true) {
         print("-------------------- 🚀 START OF REQUEST 🚀 --------------------")
         if let url = request?.url {
             print("===> DEBUG: REQUEST URL: \(url.absoluteString)")
@@ -54,7 +54,7 @@ enum Logger {
         print("-------------------- 🚀 END OF REQUEST 🚀 --------------------")
     }
     
-    static func logError(error: Error, url: URL?) {
+    public static func logError(error: Error, url: URL?) {
         print("-------------------- ❌ END OF REQUEST ❌ --------------------")
         print("===> DEBUG: Failed URL: \(String(describing: url))")
         print("===> DEBUG: Error: \(error.localizedDescription)")

@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import Movies
+import Movies
 
 @Suite("🧪 String+FormattedDate")
 struct StringFormattedDateTests {

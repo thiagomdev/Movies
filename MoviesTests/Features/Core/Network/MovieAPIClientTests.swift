@@ -7,7 +7,7 @@
 
 import Testing
 import Foundation
-@testable import Movies
+import Movies
 
 @Suite("🧪 Movie API Client", .serialized)
 struct MovieAPIClientTests {
