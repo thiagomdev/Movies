@@ -14,37 +14,22 @@ public final class ImageLoader {
 
     private let url: URL?
     private let session: URLSession
+    private let cache: ImageCache
 
-    public init(url: URL?, session: URLSession = .shared) {
+    public init(url: URL?, session: URLSession = .shared, cache: ImageCache = .shared) {
         self.url = url
         self.session = session
+        self.cache = cache
     }
 }
 
 extension ImageLoader {
     public func load() async {
         guard let url else { return }
-        await fetchAndCacheImage(url)
-    }
-}
-
-extension ImageLoader {
-    private func fetchAndCacheImage(_ url: URL) async {
-         do {
-             try await session(url)
-         } catch {
-             print(error)
-         }
-     }
-}
-
-extension ImageLoader {
-    private func session(_ url: URL) async throws {
-        let (data, _) = try await session.data(from: url)
-        guard let image = UIImage(data: data) else {
-            throw APIError.invalidResponse
+        do {
+            image = try await cache.image(for: url, session: session)
+        } catch {
+            print(error)
         }
-        ImageCache.shared.setObject(image, forKey: url as NSURL)
-        self.image = image
     }
 }

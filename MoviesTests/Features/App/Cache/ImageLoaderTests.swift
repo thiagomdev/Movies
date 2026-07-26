@@ -40,7 +40,7 @@ struct ImageLoaderTests {
             return (response, pngData)
         }
 
-        let sut = ImageLoader(url: .anyURL, session: makeSession())
+        let sut = ImageLoader(url: .anyURL, session: makeSession(), cache: ImageCache())
 
         await sut.load()
 
@@ -60,7 +60,7 @@ struct ImageLoaderTests {
             return (response, Data("not an image".utf8))
         }
 
-        let sut = ImageLoader(url: .anyURL, session: makeSession())
+        let sut = ImageLoader(url: .anyURL, session: makeSession(), cache: ImageCache())
 
         await sut.load()
 
@@ -74,7 +74,7 @@ struct ImageLoaderTests {
             throw URLError(.notConnectedToInternet)
         }
 
-        let sut = ImageLoader(url: .anyURL, session: makeSession())
+        let sut = ImageLoader(url: .anyURL, session: makeSession(), cache: ImageCache())
 
         await sut.load()
 
