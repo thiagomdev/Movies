@@ -17,7 +17,8 @@ public enum APIError: LocalizedError, Equatable {
     case unauthorized
     case notFound
     case rateLimited
-    
+    case cancelled
+
     public var errorDescription: String? {
         switch self {
         case .invalidURL:
@@ -36,6 +37,8 @@ public enum APIError: LocalizedError, Equatable {
             return "The requested resource was not found."
         case .rateLimited:
             return "Too many requests. Please try again later."
+        case .cancelled:
+            return "The request was cancelled."
         }
     }
 
@@ -45,7 +48,8 @@ public enum APIError: LocalizedError, Equatable {
              (.invalidResponse, .invalidResponse),
              (.unauthorized, .unauthorized),
              (.notFound, .notFound),
-             (.rateLimited, .rateLimited):
+             (.rateLimited, .rateLimited),
+             (.cancelled, .cancelled):
             return true
         case let (.httpError(a), .httpError(b)):
             return a == b

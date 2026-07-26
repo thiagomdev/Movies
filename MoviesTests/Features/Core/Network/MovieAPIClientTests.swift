@@ -138,7 +138,7 @@ struct MovieAPIClientTests {
 
         let sut = makeSut()
 
-        await #expect(throws: CancellationError.self) {
+        await #expect(throws: APIError.cancelled) {
             let _: Movie = try await sut.request(MoviesEndpoint.movies)
         }
     }
