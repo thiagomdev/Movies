@@ -16,88 +16,110 @@ struct MovieAPIClientTests {
         URLProtocolStub.requestHandler = nil
     }
     
-    @Test(arguments: [200, 201, 226, 299])
-    func request_success(code: Int) async throws {
+    @Test
+    func request_success() async throws {
         let expectedMovies: Movie = .fixture
         let data = try JSONEncoder().encode(expectedMovies)
         defer { URLProtocolStub.requestHandler = nil }
+        let samples = [200, 201, 226, 299]
 
-        URLProtocolStub.requestHandler = { _ in
-            let response = HTTPURLResponse(
-                url: .anyURL,
-                statusCode: code,
-                httpVersion: nil,
-                headerFields: nil
-            )!
-            return (response, data)
-        }
+        for code in samples {
+            URLProtocolStub.requestHandler = { _ in
+                let response = HTTPURLResponse(
+                    url: .anyURL,
+                    statusCode: code,
+                    httpVersion: nil,
+                    headerFields: nil
+                )!
+                return (response, data)
+            }
 
-        let sut = makeSut()
+            let sut = makeSut()
 
-        let result: Movie = try await sut.request(MoviesEndpoint.movies)
-        #expect(result.results == expectedMovies.results)
-    }
-
-    @Test(arguments: [199, 300, 400, 500])
-    func request_httpError_forNon2xxCodes(code: Int) async throws {
-        defer { URLProtocolStub.requestHandler = nil }
-        URLProtocolStub.requestHandler = { _ in
-            let response = HTTPURLResponse(
-                url: .anyURL,
-                statusCode: code,
-                httpVersion: nil,
-                headerFields: nil
-            )!
-            return (response, Data())
-        }
-
-        let sut = makeSut()
-
-        await #expect(throws: APIError.httpError(statusCode: code)) {
-            let _: Movie = try await sut.request(MoviesEndpoint.movies)
+            let result: Movie = try await sut.request(MoviesEndpoint.movies)
+            #expect(result.results == expectedMovies.results, "falhou para o código \(code)")
         }
     }
-    
-    @Test(arguments: zip(
-        [401, 404, 429, 500],
-        [APIError.unauthorized, .notFound, .rateLimited, .httpError(statusCode: 500)]
-    ))
-    func request_throwsExpectedError(code: Int, expectedError: APIError) async throws {
+
+    @Test
+    func request_httpError_forNon2xxCodes() async throws {
         defer { URLProtocolStub.requestHandler = nil }
-        URLProtocolStub.requestHandler = { _ in
-            let response = HTTPURLResponse(
-                url: .anyURL,
-                statusCode: code,
-                httpVersion: nil,
-                headerFields: nil
-            )!
-            return (response, Data())
+        let samples = [199, 300, 400, 500]
+
+        for code in samples {
+            URLProtocolStub.requestHandler = { _ in
+                let response = HTTPURLResponse(
+                    url: .anyURL,
+                    statusCode: code,
+                    httpVersion: nil,
+                    headerFields: nil
+                )!
+                return (response, Data())
+            }
+
+            let sut = makeSut()
+
+            await #expect(throws: APIError.httpError(statusCode: code), "falhou para o código \(code)") {
+                let _: Movie = try await sut.request(MoviesEndpoint.movies)
+            }
         }
+    }
 
-        let sut = makeSut()
+    @Test
+    func request_throwsExpectedError() async throws {
+        defer { URLProtocolStub.requestHandler = nil }
+        let samples: [(code: Int, expectedError: APIError)] = [
+            (401, .unauthorized),
+            (404, .notFound),
+            (429, .rateLimited),
+            (500, .httpError(statusCode: 500))
+        ]
 
-        await #expect(throws: expectedError) {
-            let _: Movie = try await sut.request(MoviesEndpoint.movies)
+        for sample in samples {
+            URLProtocolStub.requestHandler = { _ in
+                let response = HTTPURLResponse(
+                    url: .anyURL,
+                    statusCode: sample.code,
+                    httpVersion: nil,
+                    headerFields: nil
+                )!
+                return (response, Data())
+            }
+
+            let sut = makeSut()
+
+            await #expect(throws: sample.expectedError, "falhou para o código \(sample.code)") {
+                let _: Movie = try await sut.request(MoviesEndpoint.movies)
+            }
         }
     }
 
     @Test
     func request_decodingError() async throws {
         defer { URLProtocolStub.requestHandler = nil }
-        URLProtocolStub.requestHandler = { _ in
-            let response = HTTPURLResponse(
-                url: .anyURL,
-                statusCode: 200,
-                httpVersion: nil,
-                headerFields: nil
-            )!
-            return (response, Data("not a valid json".utf8))
-        }
+        let samples: [Data] = [
+            Data(),
+            Data("not a valid json".utf8),
+            Data("{ invalid".utf8),
+            Data("{\"unexpected\": \"shape\"}".utf8)
+        ]
 
-        let sut = makeSut()
+        for sample in samples {
+            URLProtocolStub.requestHandler = { _ in
+                let response = HTTPURLResponse(
+                    url: .anyURL,
+                    statusCode: 200,
+                    httpVersion: nil,
+                    headerFields: nil
+                )!
+                return (response, sample)
+            }
 
-        await #expect(throws: APIError.self) {
-            let _: Movie = try await sut.request(MoviesEndpoint.movies)
+            let sut = makeSut()
+
+            await #expect(throws: APIError.self, "falhou para o payload \(String(decoding: sample, as: UTF8.self))") {
+                let _: Movie = try await sut.request(MoviesEndpoint.movies)
+            }
         }
     }
 
