@@ -13,6 +13,7 @@ final class MoviesUITests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         app = XCUIApplication()
+        app.launchArguments = ["UITesting"]
         app.launch()
     }
 
@@ -53,5 +54,13 @@ final class MoviesUITests: XCTestCase {
         app.navigationBars.buttons.firstMatch.tap()
 
         XCTAssertTrue(movieList.waitForExistence(timeout: 5))
+    }
+
+    func test_movieRequestFailure_showsErrorMessage() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["UITestingFailure"]
+        app.launch()
+
+        XCTAssertTrue(app.staticTexts["movieErrorMessage"].waitForExistence(timeout: 15))
     }
 }

@@ -53,4 +53,68 @@ struct APIErrorTests {
     func rateLimited() {
         #expect(APIError.rateLimited.errorDescription == "Too many requests. Please try again later.")
     }
+
+    @Test
+    func cancelled() {
+        #expect(APIError.cancelled.errorDescription == "The request was cancelled.")
+    }
+}
+
+extension APIErrorTests {
+    @Test(arguments: [
+        APIError.invalidURL,
+        .invalidResponse,
+        .unauthorized,
+        .notFound,
+        .rateLimited,
+        .cancelled
+    ])
+    func trivialCasesAreEqualToThemselves(error: APIError) {
+        #expect(error == error)
+    }
+
+    @Test
+    func httpErrorIsEqualWhenStatusCodeMatches() {
+        #expect(APIError.httpError(statusCode: 500) == .httpError(statusCode: 500))
+    }
+
+    @Test
+    func httpErrorIsNotEqualWhenStatusCodeDiffers() {
+        #expect(APIError.httpError(statusCode: 500) != .httpError(statusCode: 404))
+    }
+
+    @Test
+    func decodingErrorIsEqualWhenUnderlyingNSErrorMatches() {
+        let lhs = NSError(domain: "test", code: 1, userInfo: [NSLocalizedDescriptionKey: "bad json"])
+        let rhs = NSError(domain: "test", code: 1, userInfo: [NSLocalizedDescriptionKey: "bad json"])
+        #expect(APIError.decodingError(lhs) == .decodingError(rhs))
+    }
+
+    @Test
+    func decodingErrorIsNotEqualWhenUnderlyingNSErrorDiffers() {
+        let lhs = NSError(domain: "test", code: 1)
+        let rhs = NSError(domain: "test", code: 2)
+        #expect(APIError.decodingError(lhs) != .decodingError(rhs))
+    }
+
+    @Test
+    func networkErrorIsEqualWhenUnderlyingNSErrorMatches() {
+        let lhs = NSError(domain: "test", code: 1, userInfo: [NSLocalizedDescriptionKey: "offline"])
+        let rhs = NSError(domain: "test", code: 1, userInfo: [NSLocalizedDescriptionKey: "offline"])
+        #expect(APIError.networkError(lhs) == .networkError(rhs))
+    }
+
+    @Test
+    func networkErrorIsNotEqualWhenUnderlyingNSErrorDiffers() {
+        let lhs = NSError(domain: "test", code: 1)
+        let rhs = NSError(domain: "other", code: 1)
+        #expect(APIError.networkError(lhs) != .networkError(rhs))
+    }
+
+    @Test
+    func differentCasesAreNeverEqual() {
+        #expect(APIError.invalidURL != .notFound)
+        #expect(APIError.httpError(statusCode: 500) != .rateLimited)
+        #expect(APIError.cancelled != .invalidResponse)
+    }
 }

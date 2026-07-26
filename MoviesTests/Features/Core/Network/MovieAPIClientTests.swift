@@ -130,6 +130,31 @@ struct MovieAPIClientTests {
     }
 
     @Test
+    func request_appliesQueryParameters() async throws {
+        let expectedMovies: Movie = .fixture
+        let data = try JSONEncoder().encode(expectedMovies)
+        defer { URLProtocolStub.requestHandler = nil }
+        var capturedURL: URL?
+
+        URLProtocolStub.requestHandler = { request in
+            capturedURL = request.url
+            let response = HTTPURLResponse(
+                url: .anyURL,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: nil
+            )!
+            return (response, data)
+        }
+
+        let sut = makeSut()
+
+        let _: Movie = try await sut.request(EndpointWithParametersStub())
+
+        #expect(capturedURL?.query == "page=1")
+    }
+
+    @Test
     func request_cancellation() async throws {
         defer { URLProtocolStub.requestHandler = nil }
         URLProtocolStub.requestHandler = { _ in
