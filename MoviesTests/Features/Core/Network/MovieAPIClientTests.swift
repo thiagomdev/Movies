@@ -16,73 +16,35 @@ struct MovieAPIClientTests {
         URLProtocolStub.requestHandler = nil
     }
     
-    @Test
-    func request_success() async throws {
+    @Test(arguments: [200, 201, 226, 299])
+    func request_success(code: Int) async throws {
         let expectedMovies: Movie = .fixture
         let data = try JSONEncoder().encode(expectedMovies)
         defer { URLProtocolStub.requestHandler = nil }
+
         URLProtocolStub.requestHandler = { _ in
             let response = HTTPURLResponse(
                 url: .anyURL,
-                statusCode: 200,
+                statusCode: code,
                 httpVersion: nil,
                 headerFields: nil
             )!
             return (response, data)
         }
-        
+
         let sut = makeSut()
-        
+
         let result: Movie = try await sut.request(MoviesEndpoint.movies)
         #expect(result.results == expectedMovies.results)
     }
-    
-    @Test
-    func request_unauthorized() async throws {
-        defer { URLProtocolStub.requestHandler = nil }
-        URLProtocolStub.requestHandler = { _ in
-            let response = HTTPURLResponse(
-                url: .anyURL,
-                statusCode: 401,
-                httpVersion: nil,
-                headerFields: nil
-            )!
-            return (response, Data())
-        }
-        
-        let sut = makeSut()
-        
-        await #expect(throws: APIError.unauthorized) {
-            let _: [Movie] = try await sut.request(MoviesEndpoint.movies)
-        }
-    }
-    
-    @Test
-    func request_notFound() async throws {
-        let sut = makeSut()
-        defer { URLProtocolStub.requestHandler = nil }
-        URLProtocolStub.requestHandler = { _ in
-            let response = HTTPURLResponse(
-                url: .anyURL,
-                statusCode: 404,
-                httpVersion: nil,
-                headerFields: nil
-            )!
-            return (response, Data())
-        }
 
-        await #expect(throws: APIError.notFound) {
-            let _: [Movie] = try await sut.request(MoviesEndpoint.movies)
-        }
-    }
-
-    @Test
-    func request_rateLimited() async throws {
+    @Test(arguments: [199, 300, 400, 500])
+    func request_httpError_forNon2xxCodes(code: Int) async throws {
         defer { URLProtocolStub.requestHandler = nil }
         URLProtocolStub.requestHandler = { _ in
             let response = HTTPURLResponse(
                 url: .anyURL,
-                statusCode: 429,
+                statusCode: code,
                 httpVersion: nil,
                 headerFields: nil
             )!
@@ -91,18 +53,21 @@ struct MovieAPIClientTests {
 
         let sut = makeSut()
 
-        await #expect(throws: APIError.rateLimited) {
+        await #expect(throws: APIError.httpError(statusCode: code)) {
             let _: Movie = try await sut.request(MoviesEndpoint.movies)
         }
     }
-
-    @Test
-    func request_httpError() async throws {
+    
+    @Test(arguments: zip(
+        [401, 404, 429, 500],
+        [APIError.unauthorized, .notFound, .rateLimited, .httpError(statusCode: 500)]
+    ))
+    func request_throwsExpectedError(code: Int, expectedError: APIError) async throws {
         defer { URLProtocolStub.requestHandler = nil }
         URLProtocolStub.requestHandler = { _ in
             let response = HTTPURLResponse(
                 url: .anyURL,
-                statusCode: 500,
+                statusCode: code,
                 httpVersion: nil,
                 headerFields: nil
             )!
@@ -111,7 +76,7 @@ struct MovieAPIClientTests {
 
         let sut = makeSut()
 
-        await #expect(throws: APIError.httpError(statusCode: 500)) {
+        await #expect(throws: expectedError) {
             let _: Movie = try await sut.request(MoviesEndpoint.movies)
         }
     }
