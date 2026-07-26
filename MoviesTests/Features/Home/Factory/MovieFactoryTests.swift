@@ -6,8 +6,7 @@
 //
 
 import Testing
-import SwiftUI
-@testable import Movies
+import Movies
 
 @MainActor
 @Suite("🧪 Movie Factory")

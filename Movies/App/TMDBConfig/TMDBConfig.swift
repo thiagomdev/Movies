@@ -7,10 +7,10 @@
 
 import Foundation
 
-enum TMDBConfig {
-    static let imageBaseURL = "https://image.tmdb.org/t/p/w500"
+public enum TMDBConfig {
+    public static let imageBaseURL = "https://image.tmdb.org/t/p/w500"
     
-    static func posterURL(_ path: String?) -> URL? {
+    public static func posterURL(_ path: String?) -> URL? {
         guard let path else { return nil }
         return URL(string: "\(imageBaseURL)\(path)")
     }

@@ -5,16 +5,16 @@
 //  Created by Thiago Monteiro on 4/28/26.
 //
 
-@testable import Movies
+import Movies
 
 extension Movie {
-    static var fixture: Self {
+    public static var fixture: Self {
         .init(page: 0, results: [.fixture], totalPages: 1, totalResults: 1)
     }
 }
 
 extension MovieResult {
-    static var fixture: Self {
+    public static var fixture: Self {
         .init(
             adult: false,
             backdropPath: "/test_backdrop.jpg",

@@ -58,5 +58,6 @@ struct MovieDetailView: View {
         }
         .navigationTitle(movie.title ?? "Movie")
         .navigationBarTitleDisplayMode(.inline)
+        .accessibilityIdentifier("movieDetailView")
     }
 }

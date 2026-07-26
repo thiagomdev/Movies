@@ -5,9 +5,9 @@
 //  Created by Thiago Monteiro on 5/19/26.
 //
 
-@testable import Movies
+import Movies
 final class MovieStoreSpy: MovieUseCaseProtocol {
-    var shouldBeReturned: [MovieResult] = []
+    public var shouldBeReturned: [MovieResult] = []
     var shouldFail: APIError? = nil
     var shouldFailWithUnknownError: Error? = nil
     var expectedActions: MovieUSeCase?

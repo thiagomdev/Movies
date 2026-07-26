@@ -38,6 +38,14 @@
         "identifier" : "AA8227362F9067F60036DA9B",
         "name" : "MoviesTests"
       }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:Movies.xcodeproj",
+        "identifier" : "AA8227402F9067F60036DA9B",
+        "name" : "MoviesUITests"
+      }
     }
   ],
   "version" : 1
