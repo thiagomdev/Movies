@@ -40,6 +40,38 @@ struct UITestMovieRepositoryStub: MovieRepositoryProtocol {
                 video: false,
                 voteAverage: 7.0,
                 voteCount: 50
+            ),
+            MovieResult(
+                adult: false,
+                backdropPath: nil,
+                genreIDS: [28],
+                id: 1,
+                originalLanguage: "en",
+                originalTitle: "UI Test Movie One",
+                overview: "A movie used only for UI testing.",
+                popularity: 10,
+                posterPath: nil,
+                releaseDate: "2026-01-01",
+                title: "UI Test Movie One",
+                video: false,
+                voteAverage: 8.5,
+                voteCount: 100
+            ),
+            MovieResult(
+                adult: false,
+                backdropPath: nil,
+                genreIDS: [28],
+                id: 1,
+                originalLanguage: "en",
+                originalTitle: "UI Test Movie One",
+                overview: "A movie used only for UI testing.",
+                popularity: 10,
+                posterPath: nil,
+                releaseDate: "2026-01-01",
+                title: "UI Test Movie One",
+                video: false,
+                voteAverage: 8.5,
+                voteCount: 100
             )
         ]
     }
