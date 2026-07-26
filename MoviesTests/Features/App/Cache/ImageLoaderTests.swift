@@ -26,10 +26,9 @@ struct ImageLoaderTests {
         #expect(sut.image == nil)
     }
 
-    @Test
-    func loadWithValidImageDataSetsImage() async {
+    @Test(arguments: [makePNGData(), makeJPEGData()])
+    func loadWithValidImageDataSetsImage(payload: Data) async {
         defer { URLProtocolStub.requestHandler = nil }
-        let pngData = makePNGData()
         URLProtocolStub.requestHandler = { _ in
             let response = HTTPURLResponse(
                 url: .anyURL,
@@ -37,7 +36,7 @@ struct ImageLoaderTests {
                 httpVersion: nil,
                 headerFields: nil
             )!
-            return (response, pngData)
+            return (response, payload)
         }
 
         let sut = ImageLoader(url: .anyURL, session: makeSession(), cache: ImageCache())
@@ -89,12 +88,22 @@ extension ImageLoaderTests {
         return URLSession(configuration: config)
     }
 
-    private func makePNGData() -> Data {
+    nonisolated
+    private static func makePNGData() -> Data {
+        makeImage().pngData()!
+    }
+
+    nonisolated
+    private static func makeJPEGData() -> Data {
+        makeImage().jpegData(compressionQuality: 1.0)!
+    }
+
+    nonisolated
+    private static func makeImage() -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1))
-        let image = renderer.image { ctx in
+        return renderer.image { ctx in
             UIColor.red.setFill()
             ctx.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
         }
-        return image.pngData()!
     }
 }
