@@ -88,6 +88,7 @@ extension MovieStoreTests {
         await sut.send(expectedResult)
             
         execute()
+            
         #expect(spy.executeCalled)
         #expect(spy.executeCount == 1)
         #expect(expectedResult == .fetchMovies)
