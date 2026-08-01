@@ -77,7 +77,9 @@ extension MovieStoreTests {
         
         return (sut, spy)
     }
-    
+}
+
+extension MovieStoreTests {
     private func expect(
         _ sut: MovieStore, spy: MovieStoreSpy,
         when expectedResult: MovieIntent,
@@ -94,3 +96,4 @@ extension MovieStoreTests {
         #expect(expectedResult == .fetchMovies)
     }
 }
+
