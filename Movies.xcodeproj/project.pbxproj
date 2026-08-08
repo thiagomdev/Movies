@@ -34,16 +34,16 @@
 		AAA9BFD03026D69300DAF249 /* Exceptions for "MoviesTests" folder in "Movies" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Features/Home/Factory/UITestMovieRepositoryFailureStub.swift,
-				Features/Home/Factory/UITestMovieRepositoryStub.swift,
+				Features/Helpers/UITestMovieRepositoryFailureStub.swift,
+				Features/Helpers/UITestMovieRepositoryStub.swift,
 			);
 			target = AA8227292F9067F50036DA9B /* Movies */;
 		};
 		AAA9BFD13026D69300DAF249 /* Exceptions for "MoviesTests" folder in "MoviesTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Features/Home/Factory/UITestMovieRepositoryFailureStub.swift,
-				Features/Home/Factory/UITestMovieRepositoryStub.swift,
+				Features/Helpers/UITestMovieRepositoryFailureStub.swift,
+				Features/Helpers/UITestMovieRepositoryStub.swift,
 			);
 			target = AA8227362F9067F60036DA9B /* MoviesTests */;
 		};
