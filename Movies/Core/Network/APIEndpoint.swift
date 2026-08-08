@@ -18,3 +18,8 @@ public protocol APIClientEndpoint {
     var body: Data? { get }
     var timeout: TimeInterval { get }
 }
+
+public enum MovieResultType {
+    case success([MovieResult])
+    case failure(Error)
+}

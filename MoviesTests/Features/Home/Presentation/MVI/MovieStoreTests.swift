@@ -13,15 +13,13 @@ import Movies
 @Suite("🧪 Movie Store", .serialized)
 final class MovieStoreTests: LeakTrackerSuite {
     @Test
-    func sendShouldBeReturnedEmpty() async {
+    func sendShouldBeReturnedEmpty() async throws{
         let (sut, spy) = makeSut()
         
-        await sut.send(.fetchMovies)
-        
-        #expect(spy.executeCalled)
-        #expect(spy.executeCount == 1)
-        #expect(spy.shouldBeReturned.isEmpty)
-        #expect(spy.shouldBeReturned.count == .zero)
+        try await expect(sut, spy: spy, when: .fetchMovies, then: {
+            #expect(spy.shouldBeReturned.isEmpty)
+            #expect(spy.shouldBeReturned.count == .zero)
+        })
     }
     
     @Test
@@ -29,12 +27,10 @@ final class MovieStoreTests: LeakTrackerSuite {
         let (sut, spy) = makeSut()
         spy.shouldBeReturned = [.fixture]
         
-        await sut.send(.fetchMovies)
-        
-        #expect(spy.executeCalled)
-        #expect(spy.executeCount == 1)
-        #expect(spy.shouldBeReturned.isEmpty == false)
-        #expect(spy.shouldBeReturned.count == 1)
+        try await expect(sut, spy: spy, when: .fetchMovies, then: {
+            #expect(spy.shouldBeReturned.isEmpty == false)
+            #expect(spy.shouldBeReturned.count == 1)
+        })
     }
     
     @Test
@@ -42,12 +38,10 @@ final class MovieStoreTests: LeakTrackerSuite {
         let (sut, spy) = makeSut()
         spy.shouldBeReturned = [.fixture, .fixture, .fixture, .fixture]
         
-        await sut.send(.fetchMovies)
-        
-        #expect(spy.executeCalled)
-        #expect(spy.executeCount == 1)
-        #expect(spy.shouldBeReturned.isEmpty == false)
-        #expect(spy.shouldBeReturned.count == 4)
+        try await expect(sut, spy: spy, when: .fetchMovies, then: {
+            #expect(spy.shouldBeReturned.isEmpty == false)
+            #expect(spy.shouldBeReturned.count == 4)
+        })
     }
     
     @Test
@@ -56,11 +50,9 @@ final class MovieStoreTests: LeakTrackerSuite {
         let anyError: NSError = .init(domain: "anyError", code: -999)
         spy.shouldFail = .networkError(anyError)
 
-        await sut.send(.fetchMovies)
-
-        #expect(spy.executeCalled)
-        #expect(spy.executeCount == 1)
-        #expect(sut.state == .failed(.networkError(anyError)))
+        try await expect(sut, spy: spy, when: .fetchMovies, then: {
+            #expect(sut.state == .failed(.networkError(anyError)))
+        })
     }
 
     @Test
@@ -69,11 +61,9 @@ final class MovieStoreTests: LeakTrackerSuite {
         let unknownError: NSError = .init(domain: "unknownError", code: -999)
         spy.shouldFailWithUnknownError = unknownError
 
-        await sut.send(.fetchMovies)
-
-        #expect(spy.executeCalled)
-        #expect(spy.executeCount == 1)
-        #expect(sut.state == .failed(.networkError(unknownError)))
+        try await expect(sut, spy: spy, when: .fetchMovies, then: {
+            #expect(sut.state == .failed(.networkError(unknownError)))
+        })
     }
 }
 
@@ -88,3 +78,22 @@ extension MovieStoreTests {
         return (sut, spy)
     }
 }
+
+extension MovieStoreTests {
+    private func expect(
+        _ sut: MovieStore, spy: MovieStoreSpy,
+        when expectedResult: MovieIntent,
+        then execute: () -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line)  async throws {
+        
+        await sut.send(expectedResult)
+            
+        execute()
+            
+        #expect(spy.executeCalled)
+        #expect(spy.executeCount == 1)
+        #expect(expectedResult == .fetchMovies)
+    }
+}
+

@@ -30,6 +30,25 @@
 		AA8227372F9067F60036DA9B /* MoviesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoviesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AAA9BFD03026D69300DAF249 /* Exceptions for "MoviesTests" folder in "Movies" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Features/Helpers/UITestMovieRepositoryFailureStub.swift,
+				Features/Helpers/UITestMovieRepositoryStub.swift,
+			);
+			target = AA8227292F9067F50036DA9B /* Movies */;
+		};
+		AAA9BFD13026D69300DAF249 /* Exceptions for "MoviesTests" folder in "MoviesTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Features/Helpers/UITestMovieRepositoryFailureStub.swift,
+				Features/Helpers/UITestMovieRepositoryStub.swift,
+			);
+			target = AA8227362F9067F60036DA9B /* MoviesTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		48136638C3954434BCF63683 /* MoviesUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -43,6 +62,10 @@
 		};
 		AA82273A2F9067F60036DA9B /* MoviesTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AAA9BFD03026D69300DAF249 /* Exceptions for "MoviesTests" folder in "Movies" target */,
+				AAA9BFD13026D69300DAF249 /* Exceptions for "MoviesTests" folder in "MoviesTests" target */,
+			);
 			path = MoviesTests;
 			sourceTree = "<group>";
 		};
