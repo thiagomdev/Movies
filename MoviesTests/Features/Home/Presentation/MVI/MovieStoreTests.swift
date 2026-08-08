@@ -11,7 +11,7 @@ import Movies
 
 @MainActor
 @Suite("🧪 Movie Store", .serialized)
-final class MovieStoreTests: LeakTrackerSuite {
+final class MovieStoreTests: MemoryLeakTrackingSuite {
     @Test
     func sendShouldBeReturnedEmpty() async throws{
         let (sut, spy) = makeSut()

@@ -7,11 +7,11 @@
 
 import Testing
 
-final class MemoryLeakDetection<T: AnyObject> {
+final class MemoryLeakTracker<T: AnyObject> {
     private weak var instance: T?
     private let sourceLocation: SourceLocation
 
-    init(instance: T?, sourceLocation: SourceLocation) {
+    init(instance: T, sourceLocation: SourceLocation) {
         self.instance = instance
         self.sourceLocation = sourceLocation
     }
@@ -22,18 +22,18 @@ final class MemoryLeakDetection<T: AnyObject> {
             """
             💥 Potential Memory Leak Detected!
             ⚠️ Instance of type '\(T.self)' was not deallocated.
-            📍 Tracked from: \(sourceLocation.fileName) Line: \(sourceLocation.line)
+            📍 Tracked from: \(sourceLocation.fileName) Line: \(sourceLocation.line) Column: \(sourceLocation.column)
             """,
             sourceLocation: sourceLocation
         )
     }
 }
 
-class LeakTrackerSuite {
+class MemoryLeakTrackingSuite {
     private var trackers = [AnyObject]()
     
     func trackForMemoryLeak<T: AnyObject>(_ instance: T, source: SourceLocation) {
-        let tracker = MemoryLeakDetection(instance: instance, sourceLocation: source)
+        let tracker = MemoryLeakTracker(instance: instance, sourceLocation: source)
         trackers.append(tracker)
     }
 }

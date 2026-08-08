@@ -10,7 +10,7 @@ import Foundation
 import Movies
 
 @Suite("🧪 Movie Repository")
-final class MovieRepositoryImplTests: LeakTrackerSuite {
+final class MovieRepositoryImplTests: MemoryLeakTrackingSuite {
     @Test
     func fetchMoviesDecodesArrayAndCallsDataSourceOnce() async throws {
         let (sut, mock) = makeSut()

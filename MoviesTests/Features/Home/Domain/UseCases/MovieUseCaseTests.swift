@@ -9,7 +9,7 @@ import Testing
 import Movies
 
 @Suite("🧪 Movie UseCase")
-final class MovieUseCaseTests: LeakTrackerSuite {
+final class MovieUseCaseTests: MemoryLeakTrackingSuite {
     @Test
     func executeShouldReturnResultMovie() async throws {
         let (sut, mock) = makeSut()
