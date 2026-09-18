@@ -45,7 +45,7 @@ View → Intent → Store → UseCase → Repository → DataSource → API → 
 ## 🧪 Testes
 
 ```
-Swift Testing · URLProtocolMock · 67%+ de cobertura
+Swift Testing · URLProtocolMock · 98%+ de cobertura.
 
 MoviesTests/
 └── Features/
